@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a5db73a94daab47bb92c38e8d6234b, type: 3}
+  m_Name: PlayerConfig
+  m_EditorClassIdentifier: 
+  bullets:
+  - bullet: {fileID: 5067757108198512318, guid: 480a11c8a243041458b19c0b5f054514, type: 3}
+    levelReg: 2
+  - bullet: {fileID: 3046042879194623302, guid: 2d46d52efc5f11b4fa7026992b2f1f9a, type: 3}
+    levelReg: 0
+  - bullet: {fileID: 8984210130473625433, guid: 643cffab098e6a144877c9867b42fca3, type: 3}
+    levelReg: 1
+  sprite: {fileID: -583579982551491017, guid: 44378bc5e09dea14c8b45e5ff63c9f03, type: 3}
+  animator: {fileID: 9100000, guid: a15018782f672c348849d3768930e786, type: 2}
+  hp: 250
+  shield: 100
+  speed: 10
+  atkSpeed: 0

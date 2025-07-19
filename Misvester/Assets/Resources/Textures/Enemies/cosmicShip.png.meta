@@ -1,0 +1,728 @@
+fileFormatVersion: 2
+guid: 44378bc5e09dea14c8b45e5ff63c9f03
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -583579982551491017
+    second: cosmicShip_0
+  - first:
+      213: 5508661801977513372
+    second: cosmicShip_1
+  - first:
+      213: -1292019654425414068
+    second: cosmicShip_2
+  - first:
+      213: 4141796650024365510
+    second: cosmicShip_3
+  - first:
+      213: -6083030217444258005
+    second: cosmicShip_4
+  - first:
+      213: 2707623169113425378
+    second: cosmicShip_5
+  - first:
+      213: 135128425906688456
+    second: cosmicShip_6
+  - first:
+      213: -1608843172152989741
+    second: cosmicShip_7
+  - first:
+      213: 7236224841906320670
+    second: cosmicShip_8
+  - first:
+      213: -4769739558971116027
+    second: cosmicShip_9
+  - first:
+      213: -3534222082241103637
+    second: cosmicShip_10
+  - first:
+      213: 4542073904437209622
+    second: cosmicShip_11
+  - first:
+      213: 2032499729394038946
+    second: cosmicShip_12
+  - first:
+      213: -4308615516566199258
+    second: cosmicShip_13
+  - first:
+      213: -5494926325278832833
+    second: cosmicShip_14
+  - first:
+      213: 4321249970045942016
+    second: cosmicShip_15
+  - first:
+      213: 1312058891448593889
+    second: cosmicShip_16
+  - first:
+      213: -9111232207040861770
+    second: cosmicShip_17
+  - first:
+      213: -2347593887741099850
+    second: cosmicShip_18
+  - first:
+      213: -9016912765960151064
+    second: cosmicShip_19
+  - first:
+      213: 5293926807984704731
+    second: cosmicShip_20
+  - first:
+      213: 4329730892193818189
+    second: cosmicShip_21
+  - first:
+      213: 5782498160594359267
+    second: cosmicShip_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 88
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cosmicShip_0
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 343
+        width: 71
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73e5df90915b6e7f0800000000000000
+      internalID: -583579982551491017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_1
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 343
+        width: 71
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9502a609b2b27c40800000000000000
+      internalID: 5508661801977513372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_2
+      rect:
+        serializedVersion: 2
+        x: 278
+        y: 348
+        width: 64
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c46762f38f2d11ee0800000000000000
+      internalID: -1292019654425414068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_3
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 353
+        width: 59
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cdea98eb1e9a7930800000000000000
+      internalID: 4141796650024365510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_4
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 343
+        width: 70
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2f844b1f3cb49ba0800000000000000
+      internalID: -6083030217444258005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_5
+      rect:
+        serializedVersion: 2
+        x: 578
+        y: 339
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e58f9c3de8639520800000000000000
+      internalID: 2707623169113425378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_6
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 339
+        width: 59
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c1d931669210e100800000000000000
+      internalID: 135128425906688456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_7
+      rect:
+        serializedVersion: 2
+        x: 73
+        y: 248
+        width: 69
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d72280b8ad3ca9e0800000000000000
+      internalID: -1608843172152989741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_8
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 239
+        width: 71
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e15fea0972c3c6460800000000000000
+      internalID: 7236224841906320670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_9
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 239
+        width: 63
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 506f56c642b7ecdb0800000000000000
+      internalID: -4769739558971116027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_10
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 243
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be87da6cdbbe3fec0800000000000000
+      internalID: -3534222082241103637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_11
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 248
+        width: 60
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61a2d81b620b80f30800000000000000
+      internalID: 4542073904437209622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_12
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 253
+        width: 59
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a8fb983cb3e43c10800000000000000
+      internalID: 2032499729394038946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_13
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 239
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 624e5550409b434c0800000000000000
+      internalID: -4308615516566199258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_14
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 152
+        width: 62
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3700dade991eb3b0800000000000000
+      internalID: -5494926325278832833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_15
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 139
+        width: 59
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 009714ae3f928fb30800000000000000
+      internalID: 4321249970045942016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_16
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 42
+        width: 61
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1edaf253c9e553210800000000000000
+      internalID: 1312058891448593889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_17
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 42
+        width: 60
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b92b31c4966e8180800000000000000
+      internalID: -9111232207040861770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_18
+      rect:
+        serializedVersion: 2
+        x: 284
+        y: 42
+        width: 60
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b040541ccbab6fd0800000000000000
+      internalID: -2347593887741099850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_19
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 41
+        width: 69
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ef924eec9d7dd280800000000000000
+      internalID: -9016912765960151064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_20
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 41
+        width: 69
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdc88d8226ec77940800000000000000
+      internalID: 5293926807984704731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_21
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 41
+        width: 64
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d466f3a7e4b461c30800000000000000
+      internalID: 4329730892193818189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cosmicShip_22
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 38
+        width: 66
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e39398a07f8f3050800000000000000
+      internalID: 5782498160594359267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cosmicShip_0: -583579982551491017
+      cosmicShip_1: 5508661801977513372
+      cosmicShip_10: -3534222082241103637
+      cosmicShip_11: 4542073904437209622
+      cosmicShip_12: 2032499729394038946
+      cosmicShip_13: -4308615516566199258
+      cosmicShip_14: -5494926325278832833
+      cosmicShip_15: 4321249970045942016
+      cosmicShip_16: 1312058891448593889
+      cosmicShip_17: -9111232207040861770
+      cosmicShip_18: -2347593887741099850
+      cosmicShip_19: -9016912765960151064
+      cosmicShip_2: -1292019654425414068
+      cosmicShip_20: 5293926807984704731
+      cosmicShip_21: 4329730892193818189
+      cosmicShip_22: 5782498160594359267
+      cosmicShip_3: 4141796650024365510
+      cosmicShip_4: -6083030217444258005
+      cosmicShip_5: 2707623169113425378
+      cosmicShip_6: 135128425906688456
+      cosmicShip_7: -1608843172152989741
+      cosmicShip_8: 7236224841906320670
+      cosmicShip_9: -4769739558971116027
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

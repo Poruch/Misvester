@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb51b56cfe4b904eafde0c053eb4fd5, type: 3}
+  m_Name: DefaultVraf
+  m_EditorClassIdentifier: 
+  enemyName: Vraf
+  enemyLevel: 0
+  enemyObject: {fileID: 3065110401910651384, guid: 2430d7d90f03d3e4181ec7feefdd8062, type: 3}
+  deathEffect: {fileID: 6437604233656485790, guid: 1acfc280d707c2b478d3b9ce0938215e, type: 3}
+  angleSprite: 90
+  gunDots:
+  - bulletObj: {fileID: 8984210130473625433, guid: da81ae54c4f797b4b8406288b8e629a6, type: 3}
+    atkSpeed: 1
+    position: {x: 0, y: 0}
+  hp: 100
+  shield: 0
+  speed: 0.56
+  AtkSpeed: 2

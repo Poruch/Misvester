@@ -1,0 +1,54 @@
+{
+    "name": "UiInputControl",
+    "maps": [
+        {
+            "name": "Menu",
+            "id": "5d3ca5ed-749b-4c78-9254-7952a6e62c5a",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "17ffeeb2-bf4a-4cbb-980f-b079a8aec59e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Manual",
+                    "type": "Button",
+                    "id": "c1246351-ba15-4395-b215-c28faab49ebc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "56b6b44d-b154-4405-ae1a-7f469730bbad",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7360f926-57ef-4833-9dbd-f90c56267323",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Manual",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

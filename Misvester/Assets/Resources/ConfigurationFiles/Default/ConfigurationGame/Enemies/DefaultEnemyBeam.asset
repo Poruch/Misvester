@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fb51b56cfe4b904eafde0c053eb4fd5, type: 3}
+  m_Name: DefaultEnemyBeam
+  m_EditorClassIdentifier: 
+  enemyName: DefaultBeam
+  enemyLevel: 1
+  enemyObject: {fileID: 3065110401910651384, guid: 879644902ba0f1a4094a102a2f80385d, type: 3}
+  deathEffect: {fileID: 6437604233656485790, guid: 1acfc280d707c2b478d3b9ce0938215e, type: 3}
+  angleSprite: 0
+  gunDots:
+  - bulletObj: {fileID: 5067757108198512318, guid: efdbc38eb191e154597c31bc9ccea392, type: 3}
+    atkSpeed: 0.5
+    position: {x: 0, y: 0}
+  hp: 50
+  shield: 400
+  speed: 0
+  AtkSpeed: 0.2

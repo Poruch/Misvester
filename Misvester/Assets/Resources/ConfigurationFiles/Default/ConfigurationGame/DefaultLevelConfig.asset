@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c265ebfe24466f4fb0437203f473adb, type: 3}
+  m_Name: DefaultLevelConfig
+  m_EditorClassIdentifier: 
+  enemies:
+  - {fileID: 11400000, guid: 7fb1b7d6e005c314d9570d23f0b38cd1, type: 2}
+  - {fileID: 11400000, guid: b00892741e067ef45a75a78ec0890949, type: 2}
+  - {fileID: 11400000, guid: 46fcec2a3a15a5b44b5a09f2c09959ee, type: 2}
+  - {fileID: 11400000, guid: 583a9bd7bdd25e54fb79d99245da765f, type: 2}
+  levels:
+  - backGroundSprite: {fileID: 6963322998463068953, guid: 3e0a3564190bbf246a6144d54122f4b9, type: 3}
+    waves:
+    - prefab: {fileID: 9110848152966955477, guid: d315f12f810f75e44a2039f7e126a467, type: 3}
+    - prefab: {fileID: 5009668917255228728, guid: d2cd74b1574a4f3429430a400ed22c18, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 012890152ccd10b46bec3b598bca66d3, type: 3}
+    - prefab: {fileID: 9110848152966955477, guid: d315f12f810f75e44a2039f7e126a467, type: 3}
+    - prefab: {fileID: 9110848152966955477, guid: d315f12f810f75e44a2039f7e126a467, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 012890152ccd10b46bec3b598bca66d3, type: 3}
+    - prefab: {fileID: 5009668917255228728, guid: d2cd74b1574a4f3429430a400ed22c18, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 2b6b70f72efacff44b84b39c08c03a68, type: 3}
+  - backGroundSprite: {fileID: 8429622947459334058, guid: e8fe42d3ef3ffc54bbff69c2e7c83a41, type: 3}
+    waves:
+    - prefab: {fileID: 9110848152966955477, guid: d315f12f810f75e44a2039f7e126a467, type: 3}
+    - prefab: {fileID: 5009668917255228728, guid: d2cd74b1574a4f3429430a400ed22c18, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 012890152ccd10b46bec3b598bca66d3, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 6ca4b2cada829784da438280e6bb635b, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 2b6b70f72efacff44b84b39c08c03a68, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 6ee8c3e1763ebe243a9b459b1e7674ac, type: 3}
+  - backGroundSprite: {fileID: 157575377611287822, guid: 331de6f5acdf74240acd1a86499ad197, type: 3}
+    waves:
+    - prefab: {fileID: 6558722684092217372, guid: 2b6b70f72efacff44b84b39c08c03a68, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 6ee8c3e1763ebe243a9b459b1e7674ac, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 012890152ccd10b46bec3b598bca66d3, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 2b6b70f72efacff44b84b39c08c03a68, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 6ee8c3e1763ebe243a9b459b1e7674ac, type: 3}
+    - prefab: {fileID: 6558722684092217372, guid: 157aaf97a2a49894fa9a35ac02862cac, type: 3}
+  bonusConfig: {fileID: 11400000, guid: 5dc2ebd2ac9b337408fb13a77c15aaa8, type: 2}
