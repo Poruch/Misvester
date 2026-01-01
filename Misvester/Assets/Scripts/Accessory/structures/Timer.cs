@@ -25,8 +25,6 @@ namespace Assets.Scripts.Accessory
         }
 
         public float Time;
-
-        [NonSerialized]
         public float DeltaTime;
         private bool isTime;
         private bool isStopped;

@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Accessory;
 using System.Collections.Generic;
 
-namespace Assets.Scripts.GeneralGame
+namespace Assets.Scripts.Accessory
 {
     /// <summary>
     /// Класс для создания и управления всеми таймерами, использует паттерн одиночка

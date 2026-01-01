@@ -42,6 +42,8 @@ public class GeneralGameUi : MonoBehaviour
     [SerializeField] private Vector2 spawnOffset = new Vector2(0, 50f);
     [SerializeField] private float moveSpeed = 30f;
     FloatingTextManager floatingTextManager;
+
+
     /// <summary>
     /// При передаче true открывает интерфейс, при false закрывает
     /// </summary>
@@ -109,31 +111,8 @@ public class GeneralGameUi : MonoBehaviour
         texts.Add(writer);
     }
 
-    //[SerializeField]
-    //TextMeshProUGUI fps;
-    //Timer timer = TimeManager.Instance.CreateTimer(1,true);
-    //private void Update()
-    //{
-    //    if(timer.IsTime)
-    //        fps.text = ((int)(1 / Time.deltaTime)).ToString();
-    //}
-
-    //[SerializeField]
-    //TextMeshProUGUI waveTime;
-
-
-
     UnityEvent onGameRestart = new UnityEvent();
     UnityEvent onExit = new UnityEvent();
-    public void OpenManual()
-    {
-        string commandText = @"Manual,_Катаргин,_Киладзе,_Мальшаков_РИС24_4.chm";
-        var proc = new Process();
-        proc.StartInfo.FileName = commandText;
-        proc.StartInfo.UseShellExecute = true;
-        proc.Start();
-        IsOpen = true;
-    }
 
     [SerializeField]
     Image weaponSprite = null;
@@ -156,16 +135,6 @@ public class GeneralGameUi : MonoBehaviour
         pauseMenu.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -150, 0);
         ClearEnemyHealthBars();
         IsOpen = true;
-        //if (GameManager.isEndless)
-        //{
-        //    continueButton.GetComponent<Button>().interactable = false;
-        //    continueButton.GetComponent<Image>().enabled = false;
-        //    continueButton.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.score.ToString();
-        //}
-        //else
-        //{
-        //    continueButton.gameObject.SetActive(false);
-        //}
     }
 
 
@@ -199,17 +168,6 @@ public class GeneralGameUi : MonoBehaviour
         texts.ForEach(x => x.Enable());
         pauseMenu.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         IsOpen = false;
-
-        //if (GameManager.isEndless)
-        //{
-        //    continueButton.GetComponent<Button>().interactable = true;
-        //    continueButton.GetComponent<Image>().enabled = true;
-        //    continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
-        //}
-        //else
-        //{
-        //    continueButton.gameObject.SetActive(true);
-        //}
     }
 
     public void ClearEnemyHealthBars()
@@ -228,16 +186,6 @@ public class GeneralGameUi : MonoBehaviour
         pauseMenu.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -150, 0);
         ClearEnemyHealthBars();
         IsOpen = true;
-        //if (GameManager.isEndless)
-        //{
-        //    continueButton.GetComponent<Button>().interactable = false;
-        //    continueButton.GetComponent<Image>().enabled = false;
-        //    continueButton.GetComponentInChildren<TextMeshProUGUI>().text = GameManager.score.ToString();
-        //}
-        //else
-        //{
-        //    continueButton.gameObject.SetActive(false);
-        //}
     }
     public void CloseWinScreen()
     {
@@ -245,17 +193,6 @@ public class GeneralGameUi : MonoBehaviour
         texts.ForEach(x => x.Enable());
         pauseMenu.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
         IsOpen = false;
-        //if (GameManager.isEndless)
-        //{
-        //    continueButton.GetComponent<Button>().interactable = true;
-        //    continueButton.GetComponent<Image>().enabled = true;
-        //    continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
-        //}
-        //else
-        //{
-        //    continueButton.gameObject.SetActive(true);
-        //}
-
     }
 
 
@@ -271,7 +208,6 @@ public class GeneralGameUi : MonoBehaviour
     }
     IEnumerator LoadAnimation(bool right)
     {
-        //float time = 0.1f;
         int countIteration = 100;
         for (int i = 0; i <= countIteration; i++)
         {
@@ -279,7 +215,7 @@ public class GeneralGameUi : MonoBehaviour
                 loadScreen.fillAmount = (1 - (float)i / countIteration);
             else
                 loadScreen.fillAmount = (float)i / countIteration;
-            yield return null;//new WaitForSeconds(time / countIteration);
+            yield return null;
         }
         loadScreen.gameObject.SetActive(false);
         onLoadAnimationEnd.Invoke();

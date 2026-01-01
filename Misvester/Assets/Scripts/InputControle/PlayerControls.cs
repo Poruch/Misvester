@@ -299,6 +299,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Iteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""636822d5-e5c4-40b4-b503-1d385663c366"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -334,6 +343,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""SlowMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f2e2e833-e13e-4d38-abf9-7325380fd0f1"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Iteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -348,6 +368,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Iteract_Attack = m_Iteract.FindAction("Attack", throwIfNotFound: true);
         m_Iteract_ChangeWeapon = m_Iteract.FindAction("ChangeWeapon", throwIfNotFound: true);
         m_Iteract_SlowMove = m_Iteract.FindAction("SlowMove", throwIfNotFound: true);
+        m_Iteract_Iteract = m_Iteract.FindAction("Iteract", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -528,6 +549,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Iteract_Attack;
     private readonly InputAction m_Iteract_ChangeWeapon;
     private readonly InputAction m_Iteract_SlowMove;
+    private readonly InputAction m_Iteract_Iteract;
     /// <summary>
     /// Provides access to input actions defined in input action map "Iteract".
     /// </summary>
@@ -551,6 +573,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Iteract/SlowMove".
         /// </summary>
         public InputAction @SlowMove => m_Wrapper.m_Iteract_SlowMove;
+        /// <summary>
+        /// Provides access to the underlying input action "Iteract/Iteract".
+        /// </summary>
+        public InputAction @Iteract => m_Wrapper.m_Iteract_Iteract;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -586,6 +612,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SlowMove.started += instance.OnSlowMove;
             @SlowMove.performed += instance.OnSlowMove;
             @SlowMove.canceled += instance.OnSlowMove;
+            @Iteract.started += instance.OnIteract;
+            @Iteract.performed += instance.OnIteract;
+            @Iteract.canceled += instance.OnIteract;
         }
 
         /// <summary>
@@ -606,6 +635,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SlowMove.started -= instance.OnSlowMove;
             @SlowMove.performed -= instance.OnSlowMove;
             @SlowMove.canceled -= instance.OnSlowMove;
+            @Iteract.started -= instance.OnIteract;
+            @Iteract.performed -= instance.OnIteract;
+            @Iteract.canceled -= instance.OnIteract;
         }
 
         /// <summary>
@@ -682,5 +714,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSlowMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Iteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnIteract(InputAction.CallbackContext context);
     }
 }
