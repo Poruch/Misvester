@@ -18,6 +18,7 @@ namespace Assets.Scripts.NPC
         private Vector2 firstPressedDirection = Vector2.down;
         private bool isFirstPress = true;
         AccessoryTypes.Orientation orientation;
+        [SerializeField]MovementController movementController;
 
         [SerializeField]Timer IDLETimer = TimeManager.Instance.CreateTimer(1);
 
@@ -69,11 +70,11 @@ namespace Assets.Scripts.NPC
                     }
 
                     // Для движения используем rawDirection (с диагоналями)
-                    transform.position += new Vector3(
+                    movementController.Move(new Vector3(
                         speed * discreteDirection.x * Time.deltaTime,
                         speed * discreteDirection.y * Time.deltaTime,
                         0
-                    );
+                    ));
 
                     // Для анимации используем ПЕРВОЕ нажатое направление
                     animator.SetFloat("Horizontal", firstPressedDirection.x);

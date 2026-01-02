@@ -15,17 +15,25 @@ public class Player : MonoBehaviour
     private bool isFirstPress = true; 
     PlayerControls playerControls;
     AccessoryTypes.Orientation orientation;
+    [SerializeField]MovementController movementController;
 
-    Timer timerAttack = TimeManager.Instance.CreateTimer(1);  
+    [SerializeField]Timer timerAttack = TimeManager.Instance.CreateTimer(1);
 
+    [SerializeField]DetectionArea interactArea;
     void Start()
     {
         playerControls = new PlayerControls();
         playerControls.Enable();
         animController = gameObject.AddComponent<PlayerAnimationController>();
         animController.SetConfig(runtimeAnimatorController);
+        interactArea.OnColliderEnter.AddListener(OnInteract);
     }
 
+
+    void OnInteract(GameObject gameObject)
+    {
+        Debug.Log("Something detected");
+    }
     void Update()
     {
         Vector2 rawDirection = playerControls.Movement.Move.ReadValue<Vector2>();
@@ -50,12 +58,15 @@ public class Player : MonoBehaviour
             }
 
             // Для движения используем rawDirection (с диагоналями)
-            transform.position += new Vector3(
+            //transform.position += new Vector3(
+            //    speed * discreteDirection.x * Time.deltaTime,
+            //    speed * discreteDirection.y * Time.deltaTime,
+            //    0
+            //);
+            movementController.Move(new Vector3(
                 speed * discreteDirection.x * Time.deltaTime,
-                speed * discreteDirection.y * Time.deltaTime,
-                0
-            );
-
+                speed * discreteDirection.y * Time.deltaTime));
+            interactArea.SetPosition(discreteDirection);
             // Для анимации используем ПЕРВОЕ нажатое направление
             animController.Animator.SetFloat("Horizontal", firstPressedDirection.x);
             animController.Animator.SetFloat("Vertical", firstPressedDirection.y);
@@ -68,7 +79,7 @@ public class Player : MonoBehaviour
         {
             // Сброс флага первого нажатия при остановке
             isFirstPress = true;
-
+            interactArea.SetPosition(lastDirection);
             // При остановке используем последнее сохраненное направление
             animController.Animator.SetFloat("Horizontal", lastDirection.x);
             animController.Animator.SetFloat("Vertical", lastDirection.y);
@@ -113,4 +124,8 @@ public class Player : MonoBehaviour
             playerControls.Disable();
         }
     }
+
+
+
+
 }
