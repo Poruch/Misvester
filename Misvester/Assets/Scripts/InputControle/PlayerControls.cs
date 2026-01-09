@@ -270,7 +270,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             ]
         },
         {
-            ""name"": ""Iteract"",
+            ""name"": ""Interact"",
             ""id"": ""e9ef0ae3-2ee2-4995-94a9-0235f6bd6276"",
             ""actions"": [
                 {
@@ -301,7 +301,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Iteract"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""636822d5-e5c4-40b4-b503-1d385663c366"",
                     ""expectedControlType"": """",
@@ -351,7 +351,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Iteract"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -363,18 +363,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Movement
         m_Movement = asset.FindActionMap("Movement", throwIfNotFound: true);
         m_Movement_Move = m_Movement.FindAction("Move", throwIfNotFound: true);
-        // Iteract
-        m_Iteract = asset.FindActionMap("Iteract", throwIfNotFound: true);
-        m_Iteract_Attack = m_Iteract.FindAction("Attack", throwIfNotFound: true);
-        m_Iteract_ChangeWeapon = m_Iteract.FindAction("ChangeWeapon", throwIfNotFound: true);
-        m_Iteract_SlowMove = m_Iteract.FindAction("SlowMove", throwIfNotFound: true);
-        m_Iteract_Iteract = m_Iteract.FindAction("Iteract", throwIfNotFound: true);
+        // Interact
+        m_Interact = asset.FindActionMap("Interact", throwIfNotFound: true);
+        m_Interact_Attack = m_Interact.FindAction("Attack", throwIfNotFound: true);
+        m_Interact_ChangeWeapon = m_Interact.FindAction("ChangeWeapon", throwIfNotFound: true);
+        m_Interact_SlowMove = m_Interact.FindAction("SlowMove", throwIfNotFound: true);
+        m_Interact_Interact = m_Interact.FindAction("Interact", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
     {
         UnityEngine.Debug.Assert(!m_Movement.enabled, "This will cause a leak and performance issues, PlayerControls.Movement.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_Iteract.enabled, "This will cause a leak and performance issues, PlayerControls.Iteract.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Interact.enabled, "This will cause a leak and performance issues, PlayerControls.Interact.Disable() has not been called.");
     }
 
     /// <summary>
@@ -543,44 +543,44 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     /// </summary>
     public MovementActions @Movement => new MovementActions(this);
 
-    // Iteract
-    private readonly InputActionMap m_Iteract;
-    private List<IIteractActions> m_IteractActionsCallbackInterfaces = new List<IIteractActions>();
-    private readonly InputAction m_Iteract_Attack;
-    private readonly InputAction m_Iteract_ChangeWeapon;
-    private readonly InputAction m_Iteract_SlowMove;
-    private readonly InputAction m_Iteract_Iteract;
+    // Interact
+    private readonly InputActionMap m_Interact;
+    private List<IInteractActions> m_InteractActionsCallbackInterfaces = new List<IInteractActions>();
+    private readonly InputAction m_Interact_Attack;
+    private readonly InputAction m_Interact_ChangeWeapon;
+    private readonly InputAction m_Interact_SlowMove;
+    private readonly InputAction m_Interact_Interact;
     /// <summary>
-    /// Provides access to input actions defined in input action map "Iteract".
+    /// Provides access to input actions defined in input action map "Interact".
     /// </summary>
-    public struct IteractActions
+    public struct InteractActions
     {
         private @PlayerControls m_Wrapper;
 
         /// <summary>
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
-        public IteractActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InteractActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Iteract/Attack".
+        /// Provides access to the underlying input action "Interact/Attack".
         /// </summary>
-        public InputAction @Attack => m_Wrapper.m_Iteract_Attack;
+        public InputAction @Attack => m_Wrapper.m_Interact_Attack;
         /// <summary>
-        /// Provides access to the underlying input action "Iteract/ChangeWeapon".
+        /// Provides access to the underlying input action "Interact/ChangeWeapon".
         /// </summary>
-        public InputAction @ChangeWeapon => m_Wrapper.m_Iteract_ChangeWeapon;
+        public InputAction @ChangeWeapon => m_Wrapper.m_Interact_ChangeWeapon;
         /// <summary>
-        /// Provides access to the underlying input action "Iteract/SlowMove".
+        /// Provides access to the underlying input action "Interact/SlowMove".
         /// </summary>
-        public InputAction @SlowMove => m_Wrapper.m_Iteract_SlowMove;
+        public InputAction @SlowMove => m_Wrapper.m_Interact_SlowMove;
         /// <summary>
-        /// Provides access to the underlying input action "Iteract/Iteract".
+        /// Provides access to the underlying input action "Interact/Interact".
         /// </summary>
-        public InputAction @Iteract => m_Wrapper.m_Iteract_Iteract;
+        public InputAction @Interact => m_Wrapper.m_Interact_Interact;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
-        public InputActionMap Get() { return m_Wrapper.m_Iteract; }
+        public InputActionMap Get() { return m_Wrapper.m_Interact; }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
         public void Enable() { Get().Enable(); }
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
@@ -588,9 +588,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
         public bool enabled => Get().enabled;
         /// <summary>
-        /// Implicitly converts an <see ref="IteractActions" /> to an <see ref="InputActionMap" /> instance.
+        /// Implicitly converts an <see ref="InteractActions" /> to an <see ref="InputActionMap" /> instance.
         /// </summary>
-        public static implicit operator InputActionMap(IteractActions set) { return set.Get(); }
+        public static implicit operator InputActionMap(InteractActions set) { return set.Get(); }
         /// <summary>
         /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
         /// </summary>
@@ -598,11 +598,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
         /// </remarks>
-        /// <seealso cref="IteractActions" />
-        public void AddCallbacks(IIteractActions instance)
+        /// <seealso cref="InteractActions" />
+        public void AddCallbacks(IInteractActions instance)
         {
-            if (instance == null || m_Wrapper.m_IteractActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_IteractActionsCallbackInterfaces.Add(instance);
+            if (instance == null || m_Wrapper.m_InteractActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteractActionsCallbackInterfaces.Add(instance);
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
@@ -612,9 +612,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SlowMove.started += instance.OnSlowMove;
             @SlowMove.performed += instance.OnSlowMove;
             @SlowMove.canceled += instance.OnSlowMove;
-            @Iteract.started += instance.OnIteract;
-            @Iteract.performed += instance.OnIteract;
-            @Iteract.canceled += instance.OnIteract;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
         }
 
         /// <summary>
@@ -623,8 +623,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
         /// </remarks>
-        /// <seealso cref="IteractActions" />
-        private void UnregisterCallbacks(IIteractActions instance)
+        /// <seealso cref="InteractActions" />
+        private void UnregisterCallbacks(IInteractActions instance)
         {
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
@@ -635,18 +635,18 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SlowMove.started -= instance.OnSlowMove;
             @SlowMove.performed -= instance.OnSlowMove;
             @SlowMove.canceled -= instance.OnSlowMove;
-            @Iteract.started -= instance.OnIteract;
-            @Iteract.performed -= instance.OnIteract;
-            @Iteract.canceled -= instance.OnIteract;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
         }
 
         /// <summary>
-        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="IteractActions.UnregisterCallbacks(IIteractActions)" />.
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="InteractActions.UnregisterCallbacks(IInteractActions)" />.
         /// </summary>
-        /// <seealso cref="IteractActions.UnregisterCallbacks(IIteractActions)" />
-        public void RemoveCallbacks(IIteractActions instance)
+        /// <seealso cref="InteractActions.UnregisterCallbacks(IInteractActions)" />
+        public void RemoveCallbacks(IInteractActions instance)
         {
-            if (m_Wrapper.m_IteractActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_InteractActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
@@ -656,21 +656,21 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <remarks>
         /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
         /// </remarks>
-        /// <seealso cref="IteractActions.AddCallbacks(IIteractActions)" />
-        /// <seealso cref="IteractActions.RemoveCallbacks(IIteractActions)" />
-        /// <seealso cref="IteractActions.UnregisterCallbacks(IIteractActions)" />
-        public void SetCallbacks(IIteractActions instance)
+        /// <seealso cref="InteractActions.AddCallbacks(IInteractActions)" />
+        /// <seealso cref="InteractActions.RemoveCallbacks(IInteractActions)" />
+        /// <seealso cref="InteractActions.UnregisterCallbacks(IInteractActions)" />
+        public void SetCallbacks(IInteractActions instance)
         {
-            foreach (var item in m_Wrapper.m_IteractActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_InteractActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_IteractActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_InteractActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
     /// <summary>
-    /// Provides a new <see cref="IteractActions" /> instance referencing this action map.
+    /// Provides a new <see cref="InteractActions" /> instance referencing this action map.
     /// </summary>
-    public IteractActions @Iteract => new IteractActions(this);
+    public InteractActions @Interact => new InteractActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Movement" which allows adding and removing callbacks.
     /// </summary>
@@ -687,11 +687,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
     }
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Iteract" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Interact" which allows adding and removing callbacks.
     /// </summary>
-    /// <seealso cref="IteractActions.AddCallbacks(IIteractActions)" />
-    /// <seealso cref="IteractActions.RemoveCallbacks(IIteractActions)" />
-    public interface IIteractActions
+    /// <seealso cref="InteractActions.AddCallbacks(IInteractActions)" />
+    /// <seealso cref="InteractActions.RemoveCallbacks(IInteractActions)" />
+    public interface IInteractActions
     {
         /// <summary>
         /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
@@ -715,11 +715,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSlowMove(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Iteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnIteract(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
     }
 }

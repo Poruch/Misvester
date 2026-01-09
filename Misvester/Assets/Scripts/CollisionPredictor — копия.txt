@@ -1,8 +1,9 @@
+// CollisionPredictor.cs - наследует от CollisionDetector, добавляет физику
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class CollisionPredictor : MonoBehaviour
+public class CollisionPredictor : CollisionDetector
 {
     public enum CollisionMode
     {
@@ -10,8 +11,7 @@ public class CollisionPredictor : MonoBehaviour
         PushOut,        // Выталкивание из коллайдеров
     }
 
-    [Header("Collision Settings")]
-    [SerializeField] protected LayerMask collisionMask;
+    [Header("Physics Settings")]
     [SerializeField] protected float skinWidth = 0.01f;
     [SerializeField] protected CollisionMode collisionMode = CollisionMode.PushOut;
 
@@ -21,51 +21,30 @@ public class CollisionPredictor : MonoBehaviour
     [SerializeField] protected int maxPushOutAttempts = 3;
     [SerializeField] protected bool pushOutOnStart = true;
 
-    [Header("Trigger Settings")]
-    [SerializeField] protected bool triggerOnEnter = true;
-    [SerializeField] protected bool triggerOnStay = false;
-    [SerializeField] protected bool triggerOnExit = true;
-    [SerializeField] protected float triggerCheckInterval = 0.1f;
-
-    [Header("Debug")]
-    [SerializeField] protected bool showDebug = true;
-    [SerializeField] protected Color triggerColor = Color.yellow;
+    [Header("Physics Debug")]
     [SerializeField] protected Color collisionColor = Color.red;
-    [SerializeField] protected Color detectionColor = Color.cyan;
     [SerializeField] protected bool logPushOut = false;
 
+    // Физические компоненты (те же имена)
     protected Rigidbody2D rb2d;
-    protected Collider2D myCollider;
-    protected ContactFilter2D contactFilter;
     protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
-    protected List<GameObject> currentTriggers = new List<GameObject>();
-    protected List<Collider2D> triggerOverlapBuffer;
     protected List<Collider2D> pushOutBuffer;
-    protected float triggerTimer;
+
+    // Физические события (те же имена)
+    [Header("Physics Events")]
+    public UnityEvent<GameObject, Vector2> onCollision = new UnityEvent<GameObject, Vector2>();
+    public UnityEvent<GameObject> onPenetration = new UnityEvent<GameObject>();
+    public UnityEvent<GameObject> onPushOut = new UnityEvent<GameObject>();
 
     protected const int maxCollisionIterations = 3;
 
-    // Events
-    [Header("Events")]
-    public UnityEvent<GameObject> onTriggerEnter = new UnityEvent<GameObject>();
-    public UnityEvent<GameObject> onTriggerStay = new UnityEvent<GameObject>();
-    public UnityEvent<GameObject> onTriggerExit = new UnityEvent<GameObject>();
-    public UnityEvent<GameObject, Vector2> onCollision = new UnityEvent<GameObject, Vector2>();
-    public UnityEvent<GameObject> onPenetration = new UnityEvent<GameObject>();
-    public UnityEvent<GameObject> onPushOut = new UnityEvent<GameObject>(); // Новое событие
-
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake(); // Вызываем Awake родителя
+
         rb2d = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>();
 
-        // Настройка фильтра коллизий
-        contactFilter = new ContactFilter2D();
-        contactFilter.SetLayerMask(collisionMask);
-        contactFilter.useLayerMask = true;
-        contactFilter.useTriggers = false;
-
-        // Инициализация Rigidbody если нужно
+        // Инициализация Rigidbody (такая же как в оригинале)
         if (rb2d == null)
         {
             rb2d = gameObject.AddComponent<Rigidbody2D>();
@@ -74,36 +53,23 @@ public class CollisionPredictor : MonoBehaviour
         rb2d.simulated = true;
         rb2d.useFullKinematicContacts = true;
 
-        // Инициализация буферов
-        triggerOverlapBuffer = new List<Collider2D>(16);
+        // Инициализация буфера для выталкивания
         pushOutBuffer = new List<Collider2D>(16);
     }
 
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start(); // Вызываем Start родителя
+
         // Начальное выталкивание при старте
         if (pushOutOnStart)
         {
             PerformPushOut();
         }
     }
-
-    protected virtual void Update()
+    protected override void FixedUpdate()
     {
-        // Периодическая статическая проверка
-        if (collisionMode == CollisionMode.TriggerOnly)
-        {
-            triggerTimer += Time.deltaTime;
-            if (triggerTimer >= triggerCheckInterval)
-            {
-                PerformStaticDetection();
-                triggerTimer = 0f;
-            }
-        }
-    }
-
-    protected virtual void FixedUpdate()
-    {
+        base.FixedUpdate();
         // Выталкивание каждый физический кадр
         if (pushOutEveryFrame && collisionMode == CollisionMode.PushOut)
         {
@@ -291,135 +257,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Статическое обнаружение объектов внутри коллайдера
-    /// </summary>
-    public void PerformStaticDetection()
-    {
-        if (triggerOverlapBuffer == null)
-            triggerOverlapBuffer = new List<Collider2D>(16);
-
-        triggerOverlapBuffer.Clear();
-
-        if (myCollider == null)
-        {
-            Debug.LogWarning("Нет Collider2D для обнаружения!", this);
-            return;
-        }
-
-        // Получаем все коллайдеры внутри нашего коллайдера
-        int hitCount = myCollider.Overlap(contactFilter, triggerOverlapBuffer);
-
-        // Создаем список новых объектов
-        List<GameObject> newDetectedObjects = new List<GameObject>();
-
-        foreach (Collider2D hitCollider in triggerOverlapBuffer)
-        {
-            if (hitCollider != null && hitCollider != myCollider)
-            {
-                GameObject hitObject = hitCollider.gameObject;
-                newDetectedObjects.Add(hitObject);
-
-                // Если объект новый - вызываем событие входа
-                if (!currentTriggers.Contains(hitObject))
-                {
-                    if (triggerOnEnter)
-                    {
-                        onTriggerEnter?.Invoke(hitObject);
-                    }
-                }
-            }
-        }
-
-        // Проверяем объекты, которые вышли из области
-        if (triggerOnExit)
-        {
-            for (int i = currentTriggers.Count - 1; i >= 0; i--)
-            {
-                GameObject oldObject = currentTriggers[i];
-                if (!newDetectedObjects.Contains(oldObject))
-                {
-                    if (triggerOnExit)
-                    {
-                        onTriggerExit?.Invoke(oldObject);
-                    }
-                    currentTriggers.RemoveAt(i);
-                }
-            }
-        }
-
-        // Обновляем список текущих объектов
-        currentTriggers = newDetectedObjects;
-
-        // Вызываем событие со всеми текущими объектами
-        for (int i = 0; i < currentTriggers.Count; i++)
-            onTriggerStay?.Invoke(currentTriggers[i]);
-
-        // Визуализация для отладки
-        if (showDebug && logPushOut)
-        {
-            Debug.Log($"Статическое обнаружение: найдено {currentTriggers.Count} объектов");
-            foreach (var obj in currentTriggers)
-            {
-                Debug.Log($"  - {obj.name}", obj);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Проверяет, находится ли конкретный объект внутри
-    /// </summary>
-    public bool IsObjectInside(GameObject targetObject)
-    {
-        return currentTriggers.Contains(targetObject);
-    }
-
-    /// <summary>
-    /// Получает все объекты внутри области
-    /// </summary>
-    public List<GameObject> GetAllObjectsInside()
-    {
-        return new List<GameObject>(currentTriggers);
-    }
-
-    /// <summary>
-    /// Получает объекты определенного типа внутри
-    /// </summary>
-    public List<T> GetObjectsInsideOfType<T>() where T : Component
-    {
-        List<T> result = new List<T>();
-        foreach (GameObject obj in currentTriggers)
-        {
-            T component = obj.GetComponent<T>();
-            if (component != null)
-            {
-                result.Add(component);
-            }
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// Быстрая проверка одного объекта на вхождение
-    /// </summary>
-    public bool CheckSingleObject(GameObject target)
-    {
-        if (target == null) return false;
-
-        if (myCollider == null)
-            myCollider = GetComponent<Collider2D>();
-
-        Collider2D targetCollider = target.GetComponent<Collider2D>();
-
-        if (myCollider == null || targetCollider == null)
-            return false;
-
-        triggerOverlapBuffer.Clear();
-        int overlapCount = myCollider.Overlap(contactFilter, triggerOverlapBuffer);
-        return overlapCount > 0 && triggerOverlapBuffer.Contains(targetCollider);
-    }
-
-    /// <summary>
-    /// Проверяет и разрешает столкновения
+    /// Проверяет и разрешает столкновения (оригинальный метод)
     /// </summary>
     protected bool CheckAndResolveCollision(ref Vector2 movement)
     {
@@ -469,7 +307,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Режим: Выталкивание
+    /// Режим: Выталкивание при движении
     /// </summary>
     protected bool HandlePushOutCollision(RaycastHit2D hit, ref Vector2 movement, float hitDistance)
     {
@@ -506,7 +344,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Режим: Выталкивание
+    /// Режим: Выталкивание (улучшенный)
     /// </summary>
     protected bool HandlePushOutCollisionDirectional(RaycastHit2D hit, ref Vector2 movement, float hitDistance)
     {
@@ -547,7 +385,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Обработка проникновения
+    /// Обработка проникновения (оригинальный метод)
     /// </summary>
     protected void HandlePenetration(RaycastHit2D hit)
     {
@@ -560,7 +398,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Триггерная проверка движения
+    /// Триггерная проверка движения (оригинальный метод)
     /// </summary>
     protected void CheckTriggerMovement(Vector2 movement)
     {
@@ -618,7 +456,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Обнаружение триггера
+    /// Обнаружение триггера (оригинальный метод)
     /// </summary>
     protected void OnTriggerDetected(GameObject other)
     {
@@ -635,7 +473,7 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Находит ближайшее столкновение
+    /// Находит ближайшее столкновение (оригинальный метод)
     /// </summary>
     protected RaycastHit2D GetClosestHit(int hitCount)
     {
@@ -670,37 +508,18 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Установка маски коллизий
+    /// Принудительное выталкивание из всех коллайдеров
     /// </summary>
-    public void SetCollisionMask(LayerMask newMask)
+    public void ForcePushOut()
     {
-        collisionMask = newMask;
-        contactFilter.SetLayerMask(newMask);
-    }
-
-    /// <summary>
-    /// Настройка триггерных событий
-    /// </summary>
-    public void SetTriggerEvents(bool onEnter, bool onStay, bool onExit)
-    {
-        triggerOnEnter = onEnter;
-        triggerOnStay = onStay;
-        triggerOnExit = onExit;
-    }
-
-    /// <summary>
-    /// Очистка текущих триггеров
-    /// </summary>
-    public void ClearTriggers()
-    {
-        if (triggerOnExit)
+        for (int i = 0; i < 5; i++) // Пробуем 5 раз
         {
-            foreach (var trigger in currentTriggers)
-            {
-                onTriggerExit?.Invoke(trigger);
-            }
+            PerformPushOut();
+
+            // Проверяем, остались ли пересечения
+            if (pushOutBuffer.Count == 0)
+                break;
         }
-        currentTriggers.Clear();
     }
 
     /// <summary>
@@ -727,21 +546,33 @@ public class CollisionPredictor : MonoBehaviour
     }
 
     /// <summary>
-    /// Принудительное выталкивание из всех коллайдеров
+    /// Управление движением с проверкой коллизий
     /// </summary>
-    public void ForcePushOut()
+    public void Move(Vector2 movement)
     {
-        for (int i = 0; i < 5; i++) // Пробуем 5 раз
-        {
-            PerformPushOut();
+        Vector2 remainingMovement = movement;
 
-            // Проверяем, остались ли пересечения
-            if (GetOverlappingColliders().Count == 0)
+        // Итеративная обработка коллизий
+        for (int i = 0; i < maxCollisionIterations; i++)
+        {
+            if (remainingMovement.magnitude < 0.001f)
                 break;
+
+            if (CheckAndResolveCollision(ref remainingMovement))
+            {
+                rb2d.position += remainingMovement;
+                Physics2D.SyncTransforms();
+            }
+            else
+            {
+                rb2d.position += remainingMovement;
+                Physics2D.SyncTransforms();
+                break;
+            }
         }
     }
 
-    protected virtual void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
         if (!showDebug)
             return;

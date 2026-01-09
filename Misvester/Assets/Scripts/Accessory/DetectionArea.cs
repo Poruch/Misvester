@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.NPC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,21 @@ using UnityEngine.Events;
 
 public class DetectionArea : MonoBehaviour
 {
-    [SerializeField] UnityEvent<GameObject> onColliderEnter  = new();
-    [SerializeField] CollisionPredictor predictor = null;
+    [SerializeField] UnityEvent<GameObject> onColliderEnter = new();
+    [SerializeField] UnityEvent<GameObject> onColliderExit = new();
+    [SerializeField] CollisionDetector predictor = null;
     private void Awake()
     {
-        predictor.onTriggerEnter.AddListener(OnCollision);
+        predictor.onTriggerEnter.AddListener(OnCEnter);
+        predictor.onTriggerExit.AddListener(OnCExit);
+    }
+
+    public T GetFirstByType<T>() where T : Component
+    {
+        var objects = predictor.GetObjectsInsideOfType<T>();
+        if (objects.Count > 0)
+            return objects[0];
+        return null;
     }
     public void SetPosition(Vector2 newPosition)
     {
@@ -26,10 +37,14 @@ public class DetectionArea : MonoBehaviour
 
 
     public UnityEvent<GameObject> OnColliderEnter { get => onColliderEnter; set => onColliderEnter = value; }
+    public UnityEvent<GameObject> OnColliderExit { get => onColliderExit; set => onColliderExit = value; }
 
-
-    private void OnCollision(GameObject gameObject)
-    { 
+    private void OnCEnter(GameObject gameObject)
+    {
         OnColliderEnter.Invoke(gameObject);
+    }
+    private void OnCExit(GameObject gameObject)
+    {
+        OnColliderExit.Invoke(gameObject);
     }
 }

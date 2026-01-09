@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.NPC
 {
-    internal class NPCController : MonoBehaviour
+    internal class NPCController : Interactive
     {
         [SerializeField] int speed = 5;
         [SerializeField] Animator animator;
@@ -18,9 +18,9 @@ namespace Assets.Scripts.NPC
         private Vector2 firstPressedDirection = Vector2.down;
         private bool isFirstPress = true;
         AccessoryTypes.Orientation orientation;
-        [SerializeField]MovementController movementController;
+        [SerializeField] MovementController movementController;
 
-        [SerializeField]Timer IDLETimer = TimeManager.Instance.CreateTimer(1);
+        [SerializeField] Timer IDLETimer = TimeManager.Instance.CreateTimer(1);
 
         void Start()
         {
@@ -70,7 +70,7 @@ namespace Assets.Scripts.NPC
                     }
 
                     // Для движения используем rawDirection (с диагоналями)
-                    movementController.Move(new Vector3(
+                    movementController.SetDirection(new Vector3(
                         speed * discreteDirection.x * Time.deltaTime,
                         speed * discreteDirection.y * Time.deltaTime,
                         0
@@ -83,13 +83,13 @@ namespace Assets.Scripts.NPC
 
                     // Сохраняем последнее направление для idle
                     lastDirection = firstPressedDirection;
-                }                
+                }
             }
             if (IDLETimer.IsTime)
             {
                 isIDLE = true;
                 isFirstPress = true;
-
+                movementController.SetDirection(Vector2.zero);
                 // При остановке используем последнее сохраненное направление
                 animator.SetFloat("Horizontal", lastDirection.x);
                 animator.SetFloat("Vertical", lastDirection.y);
@@ -117,7 +117,7 @@ namespace Assets.Scripts.NPC
                 return new Vector2(0, Mathf.Sign(rawInput.y));
 
             return Vector2.zero;
-        }    
+        }
 
 
 

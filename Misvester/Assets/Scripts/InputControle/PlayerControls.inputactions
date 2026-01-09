@@ -184,7 +184,7 @@
             ]
         },
         {
-            "name": "Iteract",
+            "name": "Interact",
             "id": "e9ef0ae3-2ee2-4995-94a9-0235f6bd6276",
             "actions": [
                 {
@@ -215,7 +215,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Iteract",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "636822d5-e5c4-40b4-b503-1d385663c366",
                     "expectedControlType": "",
@@ -265,7 +265,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Iteract",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
