@@ -215,7 +215,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &189708374
 Animator:
   serializedVersion: 7
@@ -440,9 +440,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 1
+  maxPushSteps: 4
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5
@@ -583,9 +585,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 4
+  maxPushSteps: 4
 --- !u!212 &261836239
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2235,9 +2239,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 4
+  maxPushSteps: 4
 --- !u!212 &1143637376
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2329,7 +2335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1297613042
 Rigidbody2D:
   serializedVersion: 5
@@ -2554,9 +2560,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 2
+  maxPushSteps: 4
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5
@@ -2738,9 +2746,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 3
+  maxPushSteps: 4
 --- !u!212 &1341432011
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3078,9 +3088,11 @@ MonoBehaviour:
   pushMultiplier: 1.2
   minPushOutDistance: 0.001
   pushOutForce: 0.1
+  maxStep: 5
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   logPushOut: 0
   mass: 5
+  maxPushSteps: 4
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5

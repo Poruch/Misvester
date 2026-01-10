@@ -1,8 +1,5 @@
 // CollisionPredictor.cs - наследует от CollisionDetector, добавляет физику
 using UnityEngine;
-using UnityEngine.Events;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using System.Linq;
 
 public class PhysicalObject : CollisionDetector
@@ -19,6 +16,7 @@ public class PhysicalObject : CollisionDetector
     [SerializeField] protected float pushMultiplier = 1.5f; // ← НОВЫЙ ПАРАМЕТР: усиление толчка
     [SerializeField] protected float minPushOutDistance = 0.001f; // 1 мм — игнорировать мелкие пересечения
     [SerializeField] protected float pushOutForce = 0.002f;       // небольшой зазор, чтобы не касаться
+    [SerializeField] protected float maxStep = 5;
 
     [Header("Physics Debug")]
     [SerializeField] protected Color collisionColor = Color.red;
@@ -26,7 +24,6 @@ public class PhysicalObject : CollisionDetector
 
     // Физические компоненты (те же имена)
     protected Rigidbody2D rb2d;
-    protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
 
     [SerializeField] protected float mass = 0;
     protected const int maxCollisionIterations = 3;
@@ -125,6 +122,63 @@ public class PhysicalObject : CollisionDetector
         // Просто выталкиваемся — без учёта масс, без толкания других
         float totalPush = penetration + pushOutForce; // минимальное выталкивание + зазор
         ReceivePush(pushDirection, penetration, totalPush);
+    }
+
+    [SerializeField] int maxPushSteps = 4;
+    public bool TryPush(Vector2 direction, float pushStrong, float PushPower, int countSteps = 0)
+    {
+        // Нормализуем направление
+        if (countSteps >= maxPushSteps || PushPower < mass)
+            return false;
+
+        direction = direction.normalized;
+
+        // Проверяем, можем ли мы вообще двигаться (например, по слою)
+        if (!CanMoveInDirection(direction))
+            return false;
+
+        // Если всё ок — двигаемся
+        Vector2 movement = direction * Mathf.Min(pushStrong, maxStep);
+        if (WillCollide(movement, out RaycastHit2D hit))
+        {
+            PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
+            if (physical)
+            {
+                if (!physical.TryPush(direction, pushOutForce * 0.5f, PushPower - mass, countSteps + 1))
+                    return false; // он не может → мы тоже нет
+            }
+            else
+            {
+                return false;
+            }
+        }
+        Vector2 completeMovement = Vector2.zero;
+        completeMovement = TryMoveWithoutPenetration(movement);
+        rb2d.MovePosition(rb2d.position + completeMovement);
+        return true;
+    }
+
+    /// <summary>
+    /// Проверяет, можно ли двигаться в указанном направлении на небольшое расстояние.
+    /// Используется для предотвращения движения в стены или другие объекты.
+    /// </summary>
+    /// <param name="direction">Нормализованное направление движения (например, Vector2.right)</param>
+    /// <param name="checkDistance">Расстояние проверки (по умолчанию — небольшой шаг)</param>
+    /// <returns>true, если путь свободен; false, если есть препятствие</returns>
+    protected bool CanMoveInDirection(Vector2 direction, float checkDistance = 0.05f)
+    {
+        if (myCollider == null || rb2d == null)
+            return false;
+
+        // Убеждаемся, что направление нормализовано
+        direction = direction.normalized;
+        Vector2 origin = rb2d.position + direction.normalized * 0.01f;
+
+        // Выполняем рейкаст из центра объекта в заданном направлении
+        RaycastHit2D hit = RaycastIgnoreSelf(origin, direction, checkDistance, collisionMask);
+
+        // Если луч НЕ попал ни во что — путь свободен
+        return !hit;
     }
 
     /// <summary>

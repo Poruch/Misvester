@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using Assets.Scripts.Accessory;
 using System.Linq;
+using UnityEngine.Rendering;
 
 public class CollisionDetector : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class CollisionDetector : MonoBehaviour
     protected List<Collider2D> overlapBuffer;
     protected List<GameObject> currentTriggers = new List<GameObject>();
     protected Timer triggerTimer;
-
     // Events - те же имена
     [Header("Events")]
     public UnityEvent<GameObject> onTriggerEnter = new UnityEvent<GameObject>();
@@ -68,6 +68,76 @@ public class CollisionDetector : MonoBehaviour
                 PerformStaticDetection();
             }
         }
+    }
+
+    /// <summary>
+    /// Выполняет рейкаст в заданном направлении, игнорируя собственный объект.
+    /// </summary>
+    /// <param name="origin">Точка начала луча</param>
+    /// <param name="direction">Направление луча (автоматически нормализуется)</param>
+    /// <param name="distance">Максимальная длина луча</param>
+    /// <param name="layerMask">Маска слоёв для проверки</param>
+    /// <returns>Результат рейкаста. Если попал в другой объект — данные коллизии, иначе default.</returns>
+    protected RaycastHit2D RaycastIgnoreSelf(Vector2 origin, Vector2 direction, float distance = Mathf.Infinity, LayerMask layerMask = default)
+    {
+        if (myCollider == null)
+            return default;
+
+        // Нормализуем направление
+        if (direction != Vector2.zero)
+            direction = direction.normalized;
+        else
+            return default;
+
+        // Используем небольшой буфер для получения всех попаданий
+        RaycastHit2D[] results = new RaycastHit2D[4];
+        int hitCount = Physics2D.RaycastNonAlloc(origin, direction, results, distance, layerMask);
+
+        // Ищем первый хит, который НЕ принадлежит этому объекту
+        for (int i = 0; i < hitCount; i++)
+        {
+            if (results[i].collider != null && results[i].collider.gameObject != gameObject)
+            {
+                return results[i];
+            }
+        }
+
+        // Ничего не найдено — возвращаем "пустой" результат
+        return default;
+    }
+
+    /// <summary>
+    /// Проверяет, столкнётся ли объект с кем-то при движении по текущей скорости
+    /// </summary>
+    public bool WillCollide(Vector2 move, out RaycastHit2D hit)
+    {
+        hit = new RaycastHit2D();
+        RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
+
+        if (move.magnitude < 0.001f)
+            return false;
+
+        // Бросаем форму коллайдера вперёд
+        int hitCount = myCollider.Cast(
+            move,
+            contactFilter,
+            hitBuffer,
+            move.magnitude
+        );
+
+        if (hitCount > 0)
+        {
+            // Находим ближайший контакт
+            hit = hitBuffer[0];
+            for (int i = 1; i < hitCount; i++)
+            {
+                if (hitBuffer[i].distance < hit.distance)
+                    hit = hitBuffer[i];
+            }
+            return true;
+        }
+
+        return false;
     }
 
     protected bool UpdateOverlap()

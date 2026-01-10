@@ -100,10 +100,11 @@ public class MovementController : PhysicalObject
             PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
             if (physical)
             {
-                //PushOther(physical, movement, pushOutForce * 0.5f);
+                physical.TryPush(movement, pushOutForce * 0.5f, mass);
             }
         }
         rb2d.MovePosition(rb2d.position + completeMovement);
+        PerformPushOut();
         movement = Vector2.zero;
     }
 
@@ -173,41 +174,7 @@ public class MovementController : PhysicalObject
         }
     }
 
-    /// <summary>
-    /// Проверяет, столкнётся ли объект с кем-то при движении по текущей скорости
-    /// </summary>
-    public bool WillCollide(Vector2 move, out RaycastHit2D hit)
-    {
-        hit = new RaycastHit2D();
 
-        if (currentVelocity == Vector2.zero || myCollider == null)
-            return false;
-
-        if (move.magnitude < 0.001f)
-            return false;
-
-        // Бросаем форму коллайдера вперёд
-        int hitCount = myCollider.Cast(
-            move,
-            contactFilter,
-            hitBuffer,
-            move.magnitude
-        );
-
-        if (hitCount > 0)
-        {
-            // Находим ближайший контакт
-            hit = hitBuffer[0];
-            for (int i = 1; i < hitCount; i++)
-            {
-                if (hitBuffer[i].distance < hit.distance)
-                    hit = hitBuffer[i];
-            }
-            return true;
-        }
-
-        return false;
-    }
 
 
     /// <summary>
