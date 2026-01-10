@@ -93,55 +93,22 @@ public class MovementController : PhysicalObject
         base.FixedUpdate();
         float deltaTime = Time.fixedDeltaTime;
         ProcessMovement(deltaTime);
+        Vector2 completeMovement = Vector2.zero;
+        completeMovement = TryMoveWithoutPenetration(movement);
         if (WillCollide(movement, out RaycastHit2D hit))
         {
             PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
             if (physical)
             {
-                PushOther(physical, movement, pushOutForce * 0.5f);
+                //PushOther(physical, movement, pushOutForce * 0.5f);
             }
         }
-        Vector2 completeMovement = TryMoveWithoutPenetration(movement);
         rb2d.MovePosition(rb2d.position + completeMovement);
         movement = Vector2.zero;
     }
 
 
-    /// <summary>
-    /// Пытается переместить объект на заданное смещение, избегая проникновения в коллайдеры.
-    /// Если движение приведёт к коллизии — возвращает укороченный вектор до точки контакта.
-    /// </summary>
-    /// <param name="move">Желаемое смещение (в мировых координатах)</param>
-    /// <returns>Фактическое смещение без проникновения</returns>
-    public Vector2 TryMoveWithoutPenetration(Vector2 move)
-    {
-        if (myCollider == null || rb2d == null || move == Vector2.zero)
-            return Vector2.zero;
 
-        // Создаём временный "прогнозируемый" коллайдер (на новой позиции)
-        Vector2 originalPosition = rb2d.position;
-        Vector2 targetPosition = originalPosition + move;
-
-        // Используем ContactFilter (тот же, что и в CollisionDetector)
-        contactFilter.useTriggers = false; // важно: только физические коллайдеры
-
-        // Получаем все коллайдеры, с которыми мы пересечёмся на пути
-        RaycastHit2D[] results = new RaycastHit2D[8];
-        int hitCount = myCollider.Cast(move, contactFilter, results, move.magnitude);
-
-        if (hitCount == 0)
-        {
-            // Нет коллизий — можно двигаться полностью
-            return move;
-        }
-
-        // Находим ближайшее препятствие
-        float minDistance = results.Min(x => x.distance);
-        // Оставляем небольшой зазор (skin width), чтобы избежать дрожания
-        float safeDistance = Mathf.Max(0f, minDistance - skinWidth);
-        // Возвращаем укороченное смещение
-        return move.normalized * safeDistance;
-    }
     /// <summary>
     /// Основной метод обработки движения
     /// </summary>

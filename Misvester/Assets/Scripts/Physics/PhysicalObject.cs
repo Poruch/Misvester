@@ -3,24 +3,22 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class PhysicalObject : CollisionDetector
 {
-    public enum CollisionMode
-    {
-        TriggerOnly,    // Только события, без физического взаимодействия
-        PushOut,        // Выталкивание из коллайдеров
-    }
 
     [Header("Physics Settings")]
     [SerializeField] protected float skinWidth = 0.01f;
-    [SerializeField] protected CollisionMode collisionMode = CollisionMode.PushOut;
 
     [Header("Push Out Settings")]
+    [SerializeField] protected bool isStatic = true;
     [SerializeField] protected bool pushOutEveryFrame = true;
-    [SerializeField] protected float pushOutForce = 0.1f;
     [SerializeField] protected int maxPushOutAttempts = 3;
     [SerializeField] protected bool pushOutOnStart = true;
+    [SerializeField] protected float pushMultiplier = 1.5f; // ← НОВЫЙ ПАРАМЕТР: усиление толчка
+    [SerializeField] protected float minPushOutDistance = 0.001f; // 1 мм — игнорировать мелкие пересечения
+    [SerializeField] protected float pushOutForce = 0.002f;       // небольшой зазор, чтобы не касаться
 
     [Header("Physics Debug")]
     [SerializeField] protected Color collisionColor = Color.red;
@@ -32,6 +30,7 @@ public class PhysicalObject : CollisionDetector
 
     [SerializeField] protected float mass = 0;
     protected const int maxCollisionIterations = 3;
+    private Vector2 completeReservedPush = Vector2.zero;
     protected override void Awake()
     {
         base.Awake(); // Вызываем Awake родителя
@@ -56,7 +55,9 @@ public class PhysicalObject : CollisionDetector
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
-        PerformPushOut();
+        if (!isStatic)
+            PerformPushOut();
+        ApplyPush();
     }
 
 
@@ -67,10 +68,8 @@ public class PhysicalObject : CollisionDetector
     {
         if (myCollider == null || rb2d == null) return;
 
-
         // Получаем все коллайдеры, с которыми пересекаемся
         if (!UpdateOverlap()) return;
-
 
         // Для каждого пересечения пытаемся вытолкнуть персонажа
         foreach (Collider2D otherCollider in overlapBuffer)
@@ -79,55 +78,53 @@ public class PhysicalObject : CollisionDetector
                 continue;
             PushOutOfCollider(otherCollider);
         }
-
     }
 
-    [SerializeField] protected float pushMultiplier = 1.2f; // ← НОВЫЙ ПАРАМЕТР: усиление толчка
-
+    private void ApplyPush()
+    {
+        Vector2 newPosition = rb2d.position + completeReservedPush;
+        rb2d.MovePosition(newPosition);
+        completeReservedPush = Vector2.zero;
+    }
     /// <summary>
     /// Пытается вытолкнуть персонажа из конкретного коллайдера
     /// </summary>
     protected void PushOutOfCollider(Collider2D otherCollider)
     {
-        if (myCollider == null || otherCollider == null) return;
-        if (collisionMode != CollisionMode.PushOut) return;
+        if (myCollider == null || otherCollider == null)
+            return;
 
         ColliderDistance2D dist = myCollider.Distance(otherCollider);
-        if (!dist.isValid || dist.distance >= 0f) return;
+
+        // Нет пересечения или данные недействительны
+        if (!dist.isValid || dist.distance >= 0f)
+            return;
+
+        // Глубина проникновения (всегда > 0 при пересечении)
         float penetration = -dist.distance;
 
-        Vector2 pushDir = GetDominantAxis(-dist.normal);
-        if (pushDir.magnitude < 0.01f) return;
-        pushDir.Normalize();
-
-        PhysicalObject other = otherCollider.GetComponent<PhysicalObject>();
-
-        if (other == null)
-        {
-            // Стена — просто выталкиваемся с усиленной силой
-            ReceivePush(pushDir, penetration);
+        // Защита от микропересечений (дрожания)
+        if (penetration < minPushOutDistance)
             return;
+
+        // Направление, куда Я должен выйти (от другого объекта)
+        Vector2 pushDirection = -dist.normal;
+
+        // Для СТЕН (или если хочешь платформерное поведение) — можно использовать доминантную ось
+        // Но для универсальности оставим полную нормаль. Раскомментируй, если нужно:
+        if (otherCollider.GetComponent<PhysicalObject>() == null)
+        {
+            pushDirection = GetDominantAxis(pushDirection);
         }
 
-        if (mass > other.mass)
-        {
-            PushOther(other, pushDir, penetration);
-        }
-        else if (mass < other.mass)
-        {
-            // Легче — слабо отталкиваемся
-            ReceivePush(pushDir, penetration, pushOutForce * 0.5f);
-        }
-        else
-        {
-            // Равные массы
-            float basePush = -dist.distance;
-            float totalPush = basePush * pushMultiplier + pushOutForce;
-            Vector2 halfPush = pushDir * (totalPush * 0.5f);
+        if (pushDirection.magnitude < 0.01f)
+            return;
 
-            other.rb2d.MovePosition(other.rb2d.position + halfPush);
-            rb2d.MovePosition(rb2d.position - halfPush);
-        }
+        pushDirection.Normalize();
+
+        // Просто выталкиваемся — без учёта масс, без толкания других
+        float totalPush = penetration + pushOutForce; // минимальное выталкивание + зазор
+        ReceivePush(pushDirection, penetration, totalPush);
     }
 
     /// <summary>
@@ -158,10 +155,47 @@ public class PhysicalObject : CollisionDetector
             ? (penetration * pushMultiplier + pushOutForce)
             : customPushDistance;
 
-        Vector2 newPosition = rb2d.position + pushDirection * totalPush;
-        rb2d.MovePosition(newPosition);
+        completeReservedPush += pushDirection * totalPush;
     }
 
+
+
+
+    /// <summary>
+    /// Пытается переместить объект на заданное смещение, избегая проникновения в коллайдеры.
+    /// Если движение приведёт к коллизии — возвращает укороченный вектор до точки контакта.
+    /// </summary>
+    /// <param name="move">Желаемое смещение (в мировых координатах)</param>
+    /// <returns>Фактическое смещение без проникновения</returns>
+    public Vector2 TryMoveWithoutPenetration(Vector2 move)
+    {
+        if (myCollider == null || rb2d == null || move == Vector2.zero)
+            return Vector2.zero;
+
+        // Создаём временный "прогнозируемый" коллайдер (на новой позиции)
+        Vector2 originalPosition = rb2d.position;
+        Vector2 targetPosition = originalPosition + move;
+
+        // Используем ContactFilter (тот же, что и в CollisionDetector)
+        contactFilter.useTriggers = false; // важно: только физические коллайдеры
+
+        // Получаем все коллайдеры, с которыми мы пересечёмся на пути
+        RaycastHit2D[] results = new RaycastHit2D[8];
+        int hitCount = myCollider.Cast(move, contactFilter, results, move.magnitude);
+
+        if (hitCount == 0)
+        {
+            // Нет коллизий — можно двигаться полностью
+            return move;
+        }
+
+        // Находим ближайшее препятствие
+        float minDistance = results.Min(x => x.distance);
+        // Оставляем небольшой зазор (skin width), чтобы избежать дрожания
+        float safeDistance = Mathf.Max(0f, minDistance - skinWidth);
+        // Возвращаем укороченное смещение
+        return move.normalized * safeDistance;
+    }
 
 
 
@@ -189,13 +223,5 @@ public class PhysicalObject : CollisionDetector
 
         // По умолчанию - вверх
         return Vector2.up;
-    }
-
-    /// <summary>
-    /// Включение/выключение выталкивания
-    /// </summary>
-    public void EnablePushOut(bool enable)
-    {
-        collisionMode = enable ? CollisionMode.PushOut : CollisionMode.TriggerOnly;
     }
 }
