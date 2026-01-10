@@ -163,7 +163,19 @@ public class CollisionDetector : MonoBehaviour
             return;
         }
 
-        if (!UpdateOverlap()) return;
+        if (!UpdateOverlap())
+        {
+            for (int i = currentTriggers.Count - 1; i >= 0; i--)
+            {
+                GameObject oldObject = currentTriggers[i];
+                if (triggerOnExit)
+                {
+                    onTriggerExit?.Invoke(oldObject);
+                }
+            }
+            currentTriggers.Clear();
+            return;
+        }
         // Получаем все коллайдеры внутри нашего коллайдера
 
 

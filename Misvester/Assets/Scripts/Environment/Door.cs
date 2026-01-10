@@ -12,16 +12,35 @@ namespace Assets.Scripts.NPC
     {
         Collider2D collider = null;
         Timer timer = TimeManager.Instance.CreateTimer(4);
+        SpriteRenderer spriteRenderer = null;
         private void Start()
         {
             collider = GetComponent<Collider2D>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
         public override bool Interact(InteractArgs args)
         {
             if (!collider || !base.Interact(args)) { return false; }
 
-            collider.enabled = !collider.enabled;
+            if (collider.enabled)
+            {
+                Open();
+            }
+            else
+            {
+                Close();
+            }
             return true;
+        }
+        public void Open()
+        {
+            collider.enabled = false;
+            spriteRenderer.color = Color.green;
+        }
+        public void Close()
+        {
+            collider.enabled = true;
+            spriteRenderer.color = new Color(0, 255, 0, 0);
         }
         private void Update()
         {
@@ -29,7 +48,7 @@ namespace Assets.Scripts.NPC
             {
                 if (timer.IsTime)
                 {
-                    collider.enabled = true;
+                    //collider.enabled = true;
                 }
             }
         }
