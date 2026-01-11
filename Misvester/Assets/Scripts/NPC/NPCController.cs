@@ -13,10 +13,12 @@ namespace Assets.Scripts.NPC
     {
         [SerializeField] int speed = 5;
         [SerializeField] Animator animator;
-
+        [SerializeField] bool randomMovement = true;
+        [SerializeField] Vector2 directionMovement = Vector2.zero;
         private Vector2 lastDirection = Vector2.down;
         private Vector2 firstPressedDirection = Vector2.down;
         private bool isFirstPress = true;
+
         AccessoryTypes.Orientation orientation;
         [SerializeField] MovementController movementController;
 
@@ -36,15 +38,21 @@ namespace Assets.Scripts.NPC
         {
             if (isIDLE && IDLETimer.IsTime)
             {
-                int direction = Random.Range(0, 4);
-                switch (direction)
+                if (randomMovement)
                 {
-                    case 0: rawDirection = Vector2.up; break;      // Вверх
-                    case 1: rawDirection = Vector2.down; break;    // Вниз
-                    case 2: rawDirection = Vector2.right; break;   // Вправо
-                    case 3: rawDirection = Vector2.left; break;    // Влево
+                    int direction = Random.Range(0, 4);
+                    switch (direction)
+                    {
+                        case 0: rawDirection = Vector2.up; break;      // Вверх
+                        case 1: rawDirection = Vector2.down; break;    // Вниз
+                        case 2: rawDirection = Vector2.right; break;   // Вправо
+                        case 3: rawDirection = Vector2.left; break;    // Влево
+                    }
                 }
+                else
+                    rawDirection = directionMovement;
                 IDLETimer = TimeManager.Instance.CreateTimer(Random.Range(0, 3));
+
                 isIDLE = false;
             }
             else if (!isIDLE)

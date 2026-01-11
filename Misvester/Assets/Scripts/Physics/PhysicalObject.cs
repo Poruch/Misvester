@@ -28,6 +28,7 @@ public class PhysicalObject : CollisionDetector
     [SerializeField] protected float mass = 0;
     protected const int maxCollisionIterations = 3;
     private Vector2 completeReservedPush = Vector2.zero;
+
     protected override void Awake()
     {
         base.Awake(); // Вызываем Awake родителя
@@ -54,7 +55,13 @@ public class PhysicalObject : CollisionDetector
         base.FixedUpdate();
         if (!isStatic)
             PerformPushOut();
-        ApplyPush();
+        Vector2 completeMovement = completeReservedPush + ComputeMovement();
+        ApplyMovement(completeMovement);
+    }
+
+    protected virtual Vector2 ComputeMovement()
+    {
+        return Vector2.zero;
     }
 
 
@@ -77,10 +84,11 @@ public class PhysicalObject : CollisionDetector
         }
     }
 
-    private void ApplyPush()
+    private void ApplyMovement(Vector2 movement)
     {
-        Vector2 newPosition = rb2d.position + completeReservedPush;
+        Vector2 newPosition = rb2d.position + movement;
         rb2d.MovePosition(newPosition);
+
         completeReservedPush = Vector2.zero;
     }
     /// <summary>

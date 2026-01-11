@@ -91,6 +91,10 @@ public class MovementController : PhysicalObject
     protected override void FixedUpdate()
     {
         base.FixedUpdate();
+    }
+
+    protected override Vector2 ComputeMovement()
+    {
         float deltaTime = Time.fixedDeltaTime;
         ProcessMovement(deltaTime);
         Vector2 completeMovement = Vector2.zero;
@@ -103,12 +107,9 @@ public class MovementController : PhysicalObject
                 physical.TryPush(movement, pushOutForce * 0.5f, mass);
             }
         }
-        rb2d.MovePosition(rb2d.position + completeMovement);
-        PerformPushOut();
         movement = Vector2.zero;
+        return completeMovement;
     }
-
-
 
     /// <summary>
     /// Основной метод обработки движения

@@ -13,10 +13,13 @@ namespace Assets.Scripts.NPC
         Collider2D collider = null;
         Timer timer = TimeManager.Instance.CreateTimer(4);
         SpriteRenderer spriteRenderer = null;
+        Color baseColor = Color.white;
         private void Start()
         {
             collider = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
+            baseColor = spriteRenderer.color;
+            Close();
         }
         public override bool Interact(InteractArgs args)
         {
@@ -35,12 +38,12 @@ namespace Assets.Scripts.NPC
         public void Open()
         {
             collider.enabled = false;
-            spriteRenderer.color = Color.green;
+            spriteRenderer.color = new Color(0, 100, 0);
         }
         public void Close()
         {
             collider.enabled = true;
-            spriteRenderer.color = new Color(0, 255, 0, 0);
+            spriteRenderer.color = baseColor;
         }
         private void Update()
         {
