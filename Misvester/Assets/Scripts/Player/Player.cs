@@ -8,7 +8,7 @@ using Assets.Scripts.NPC;
 public class Player : MonoBehaviour
 {
     [SerializeField] int speed = 5;
-    PlayerAnimationController animController;
+    [SerializeField] PlayerAnimationController animController;
     [SerializeField] RuntimeAnimatorController runtimeAnimatorController;
 
     private Vector2 lastDirection = Vector2.down;
@@ -26,7 +26,8 @@ public class Player : MonoBehaviour
         playerControls = new PlayerControls();
         playerControls.Enable();
         playerControls.Interact.Interact.performed += InteractPerformed;
-        animController = gameObject.AddComponent<PlayerAnimationController>();
+        if (!animController)
+            animController = gameObject.AddComponent<PlayerAnimationController>();
         animController.SetConfig(runtimeAnimatorController);
         interactArea.OnColliderEnter.AddListener(OnInteract);
         interactArea.OnColliderExit.AddListener(OnExitInteract);

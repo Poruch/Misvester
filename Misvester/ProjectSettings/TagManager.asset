@@ -39,6 +39,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 1878057515
+    locked: 0
+  - name: Buildings
+    uniqueID: 736429383
+    locked: 0
+  - name: Characters
+    uniqueID: 2576548175
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

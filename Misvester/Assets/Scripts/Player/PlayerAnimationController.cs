@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 namespace Assets.Scripts.GeneralGame.Entities.Player
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     internal class PlayerAnimationController : MonoBehaviour
     {
         [SerializeField]
@@ -16,8 +17,15 @@ namespace Assets.Scripts.GeneralGame.Entities.Player
 
         public void SetConfig(RuntimeAnimatorController config)
         {
-            animator = gameObject.AddComponent<Animator>();
-            spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            if (!animator)
+                animator = GetComponent<Animator>();
+            if (!animator)
+                animator = gameObject.AddComponent<Animator>();
+
+            if (!spriteRenderer)
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            if (!spriteRenderer)
+                spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
 
 
             animator.runtimeAnimatorController = config;

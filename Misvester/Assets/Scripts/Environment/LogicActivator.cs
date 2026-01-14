@@ -46,7 +46,7 @@ namespace Assets.Scripts.Environment
             }
 
             bool allActive = activeCount == components.Count && components.Count > 0;
-            bool allInactive = activeCount == 0 && components.Count > 0;
+            bool Inactive = !allActive;
 
             // Событие: все активированы (только при переходе в это состояние)
             if (allActive && !wasAllActivated)
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Environment
             wasAllActivated = allActive;
 
             // Событие: выход из активации (все неактивны)
-            if (allInactive)
+            if (Inactive)
             {
                 onAllDeactivated?.Invoke();
             }
