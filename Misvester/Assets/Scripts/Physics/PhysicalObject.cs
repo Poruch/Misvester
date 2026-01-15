@@ -162,7 +162,8 @@ public class PhysicalObject : CollisionDetector
         }
         Vector2 completeMovement = Vector2.zero;
         completeMovement = TryMoveWithoutPenetration(movement);
-        rb2d.MovePosition(rb2d.position + completeMovement);
+        completeReservedPush += completeMovement;
+        //rb2d.MovePosition(rb2d.position + completeMovement);
         return true;
     }
 

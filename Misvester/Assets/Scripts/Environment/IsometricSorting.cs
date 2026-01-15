@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class IsometricSortLevel : MonoBehaviour
 {
-    [Tooltip("Чем больше значение, тем сильнее влияет Y на порядок")]
-    public float depthMultiplier = 100f;
+    public float depthMultiplier = 10000f;
     [SerializeField] public int offset = 0;
     [SerializeField] private SpriteRenderer[] spriteRenderers = new SpriteRenderer[1];
+    [SerializeField] Transform obj;
 
     void Awake()
     {
@@ -19,7 +19,10 @@ public class IsometricSortLevel : MonoBehaviour
         // Unity: больший sortingOrder = рисуется ПОВЕРХ
         for (int i = 0; i < spriteRenderers.Length; i++)
         {
-            spriteRenderers[i].sortingOrder = offset + -i + Mathf.RoundToInt(-transform.position.y * depthMultiplier);
+            if (!obj)
+                spriteRenderers[i].sortingOrder = offset + -i + Mathf.RoundToInt(-transform.position.y * depthMultiplier);
+            else
+                spriteRenderers[i].sortingOrder = offset + -i + Mathf.RoundToInt(-obj.position.y * depthMultiplier);
         }
     }
 }
