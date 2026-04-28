@@ -13,9 +13,9 @@ public class PhysicalObject : CollisionDetector
     [SerializeField] protected bool pushOutEveryFrame = true;
     [SerializeField] protected int maxPushOutAttempts = 3;
     [SerializeField] protected bool pushOutOnStart = true;
-    [SerializeField] protected float pushMultiplier = 1.5f; // ← НОВЫЙ ПАРАМЕТР: усиление толчка
-    [SerializeField] protected float minPushOutDistance = 0.001f; // 1 мм — игнорировать мелкие пересечения
-    [SerializeField] protected float pushOutForce = 0.002f;       // небольшой зазор, чтобы не касаться
+    [SerializeField] protected float pushMultiplier = 1.5f;
+    [SerializeField] protected float minPushOutDistance = 0.007f;
+    [SerializeField] protected float pushOutForce = 0.002f;
     [SerializeField] protected float maxStep = 5;
 
     [Header("Physics Debug")]
@@ -58,7 +58,10 @@ public class PhysicalObject : CollisionDetector
         Vector2 completeMovement = completeReservedPush + ComputeMovement();
         ApplyMovement(completeMovement);
     }
-
+    protected override void Update()
+    {
+        base.Update();
+    }
     protected virtual Vector2 ComputeMovement()
     {
         return Vector2.zero;
@@ -147,7 +150,11 @@ public class PhysicalObject : CollisionDetector
 
         // Если всё ок — двигаемся
         Vector2 movement = direction * Mathf.Min(pushStrong, maxStep);
-        if (WillCollide(movement, out RaycastHit2D hit))
+
+        Vector2 completeMovement = Vector2.zero;
+        completeMovement = TryMoveWithoutPenetration(movement);
+
+        if (WillCollide(completeMovement, out RaycastHit2D hit))
         {
             PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
             if (physical)
@@ -160,10 +167,7 @@ public class PhysicalObject : CollisionDetector
                 return false;
             }
         }
-        Vector2 completeMovement = Vector2.zero;
-        completeMovement = TryMoveWithoutPenetration(movement);
         completeReservedPush += completeMovement;
-        //rb2d.MovePosition(rb2d.position + completeMovement);
         return true;
     }
 
@@ -235,29 +239,38 @@ public class PhysicalObject : CollisionDetector
         if (myCollider == null || rb2d == null || move == Vector2.zero)
             return Vector2.zero;
 
-        // Создаём временный "прогнозируемый" коллайдер (на новой позиции)
-        Vector2 originalPosition = rb2d.position;
-        Vector2 targetPosition = originalPosition + move;
+        contactFilter.useTriggers = false;
 
-        // Используем ContactFilter (тот же, что и в CollisionDetector)
-        contactFilter.useTriggers = false; // важно: только физические коллайдеры
+        Vector2 direction = move.normalized;
+        float moveDistance = move.magnitude;
 
-        // Получаем все коллайдеры, с которыми мы пересечёмся на пути
         RaycastHit2D[] results = new RaycastHit2D[8];
-        int hitCount = myCollider.Cast(move, contactFilter, results, move.magnitude);
+
+        int hitCount = myCollider.Cast(direction, contactFilter, results, moveDistance + skinWidth);
 
         if (hitCount == 0)
-        {
-            // Нет коллизий — можно двигаться полностью
             return move;
+
+        float minDistance = float.MaxValue;
+        for (int i = 0; i < hitCount; i++)
+        {
+            // Пропускаем невалидные хиты
+            if (results[i].collider == null) continue;
+            if (results[i].distance < 0f) continue;
+
+            minDistance = Mathf.Min(minDistance, results[i].distance);
         }
 
-        // Находим ближайшее препятствие
-        float minDistance = results.Min(x => x.distance);
-        // Оставляем небольшой зазор (skin width), чтобы избежать дрожания
+        if (minDistance == float.MaxValue)
+            return move;
+
+        // 🔥 4. Вычисляем безопасную дистанцию с зазором
         float safeDistance = Mathf.Max(0f, minDistance - skinWidth);
-        // Возвращаем укороченное смещение
-        return move.normalized * safeDistance;
+
+        if (safeDistance < 0.001f)
+            return Vector2.zero;
+
+        return direction * safeDistance;
     }
 
 

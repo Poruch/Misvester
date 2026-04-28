@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.Accessory;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -30,6 +31,7 @@ public class MovementController : PhysicalObject
     [SerializeField] private bool rotateToDirection = false;
     [SerializeField] private float rotationSpeed = 360f;
     [SerializeField] private bool changeRotate = false;
+    [SerializeField] private float pushPower = 1;
     [Header("Target Settings")]
     [SerializeField] private Transform target;
     [SerializeField] private float targetReachedDistance = 0.1f;
@@ -75,6 +77,7 @@ public class MovementController : PhysicalObject
     private bool isMoving = false;
     protected Vector2 movement = Vector2.zero;
 
+    Timer pushTimer = TimeManager.Instance.CreateTimer(0.1f);
     protected override void Awake()
     {
         base.Awake();
@@ -98,18 +101,28 @@ public class MovementController : PhysicalObject
         float deltaTime = Time.fixedDeltaTime;
         ProcessMovement(deltaTime);
         Vector2 completeMovement = Vector2.zero;
-        completeMovement = TryMoveWithoutPenetration(movement);
         if (WillCollide(movement, out RaycastHit2D hit))
         {
             PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
             if (physical)
             {
-                physical.TryPush(movement, pushOutForce * 0.5f, mass);
+                if (pushTimer.IsTime)
+                    physical.TryPush(movement, pushPower * 0.5f, mass);
             }
         }
+        completeMovement = TryMoveWithoutPenetration(movement);
         movement = Vector2.zero;
         return completeMovement;
     }
+
+
+
+
+
+
+    ///Параша с движением
+
+
 
     /// <summary>
     /// Основной метод обработки движения
@@ -391,14 +404,6 @@ public class MovementController : PhysicalObject
         if (!isMoving) StartMovement();
     }
 
-    /// <summary>
-    /// Установить скорость
-    /// </summary>
-    public void SetSpeed(float newSpeed)
-    {
-        speed = newSpeed;
-        currentSpeed = newSpeed;
-    }
 
     /// <summary>
     /// Установить цель
@@ -463,21 +468,6 @@ public class MovementController : PhysicalObject
         oscillationStartPosition = position;
     }
 
-    /// <summary>
-    /// Получить текущую скорость
-    /// </summary>
-    public Vector2 GetCurrentVelocity()
-    {
-        return currentVelocity;
-    }
-
-    /// <summary>
-    /// Получить текущее направление
-    /// </summary>
-    public Vector2 GetCurrentDirection()
-    {
-        return currentVelocity.normalized;
-    }
 
     /// <summary>
     /// Проверить, движется ли объект
