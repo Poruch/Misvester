@@ -1,494 +1,159 @@
-﻿using Assets.Scripts.Accessory;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Класс для управления движением объектов с различными режимами
-/// </summary>
 public class MovementController : PhysicalObject
 {
     public enum MovementType
     {
-        Directional,    // Движение по заданному направлению
-        Target,         // Движение к цели
-        Path,           // Движение по пути
-        Random,         // Случайное движение
-        Follow,         // Следование за объектом
-        Oscillate,      // Колебательное движение
-        Homing          // Самонаведение на цель
+        Directional, Target, Path, Random, Follow, Oscillate, Homing
     }
 
-
-    [Header("Movement Settings")]
+    [Header("Movement")]
     [SerializeField] private MovementType movementType = MovementType.Directional;
     [SerializeField] private Vector2 direction = Vector2.right;
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float acceleration = 10f;
-    [SerializeField] private float deceleration = 8f;
-    [SerializeField] private bool useSmoothMovement = true;
-    [SerializeField] private bool rotateToDirection = false;
-    [SerializeField] private float rotationSpeed = 360f;
-    [SerializeField] private bool changeRotate = false;
-    [SerializeField] private float pushPower = 1;
-    [Header("Target Settings")]
+    [SerializeField] private float acceleration = 15f;   // плавный разгон
+
+    [Header("Target / Path")]
     [SerializeField] private Transform target;
-    [SerializeField] private float targetReachedDistance = 0.1f;
-    [SerializeField] private bool stopOnTargetReached = true;
-
-    [Header("Path Settings")]
     [SerializeField] private Transform[] waypoints;
+    [SerializeField] private float waypointDistance = 0.2f;
     [SerializeField] private bool loopPath = true;
-    [SerializeField] private float waypointReachedDistance = 0.1f;
 
-    [Header("Random Movement")]
-    [SerializeField] private float randomDirectionChangeTime = 2f;
-    [SerializeField] private float randomSpeedVariation = 2f;
+    [Header("Random")]
+    [SerializeField] private float changeDirInterval = 2f;
 
-    [Header("Follow Settings")]
+    [Header("Follow")]
     [SerializeField] private float followDistance = 2f;
-    [SerializeField] private float followSmoothness = 5f;
 
-    [Header("Oscillation Settings")]
-    [SerializeField] private float oscillationAmplitude = 2f;
-    [SerializeField] private float oscillationFrequency = 1f;
-    [SerializeField] private Vector2 oscillationAxis = Vector2.right;
+    [Header("Oscillate")]
+    [SerializeField] private float amplitude = 2f;
+    [SerializeField] private float frequency = 1f;
+    [SerializeField] private Vector2 axis = Vector2.right;
 
-    [Header("Homing Settings")]
-    [SerializeField] private float homingTurnSpeed = 90f;
+    [Header("Homing")]
     [SerializeField] private float homingRange = 10f;
+    [SerializeField] private float turnSpeed = 180f;
 
     [Header("Events")]
-    public UnityEvent onTargetReached = new UnityEvent();
-    public UnityEvent onWaypointReached = new UnityEvent();
-    public UnityEvent onMovementStarted = new UnityEvent();
-    public UnityEvent onMovementStopped = new UnityEvent();
+    public UnityEvent onTargetReached;
 
-    // Runtime variables
-    private Vector2 currentVelocity;
-    private Vector2 desiredDirection;
-    private float currentSpeed;
-    private int currentWaypointIndex = 0;
+    private Vector2 targetVelocity;
+    private int currentWaypoint;                   
     private float randomTimer;
-    private Vector2 randomDirection;
-    private Vector2 oscillationStartPosition;
-    private float oscillationTimer;
-    private bool isMoving = false;
-    protected Vector2 movement = Vector2.zero;
+    private Vector2 randomDir;
+    private Vector2 startPos;
+    private float oscTime;
 
-    Timer pushTimer = TimeManager.Instance.CreateTimer(0.1f);
     protected override void Awake()
     {
         base.Awake();
-        oscillationStartPosition = rb2d.position;
-        randomDirection = GetRandomDirection();
-        currentSpeed = speed;
+        startPos = rb.position;
+        randomDir = Random.insideUnitCircle.normalized;
     }
 
-    protected override void Update()
+    private void FixedUpdate()
     {
-        base.Update();
-    }
+        if (isStatic) return;
 
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
-    }
-
-    protected override Vector2 ComputeMovement()
-    {
-        float deltaTime = Time.fixedDeltaTime;
-        ProcessMovement(deltaTime);
-        Vector2 completeMovement = Vector2.zero;
-        if (WillCollide(movement, out RaycastHit2D hit))
-        {
-            PhysicalObject physical = hit.collider.gameObject.GetComponent<PhysicalObject>();
-            if (physical)
-            {
-                if (pushTimer.IsTime)
-                    physical.TryPush(movement, pushPower * 0.5f, mass);
-            }
-        }
-        completeMovement = TryMoveWithoutPenetration(movement);
-        movement = Vector2.zero;
-        return completeMovement;
-    }
-
-
-
-
-
-
-    ///Параша с движением
-
-
-
-    /// <summary>
-    /// Основной метод обработки движения
-    /// </summary>
-    private void ProcessMovement(float deltaTime)
-    {
-        if (!isMoving)
-            return;
-
-        // Получаем желаемое направление и скорость в зависимости от типа движения
-        Vector2 targetVelocity = GetTargetVelocity(deltaTime);
-
+        Vector2 desiredVelocity = GetDesiredVelocity();
         // Плавное изменение скорости
-        if (useSmoothMovement)
-        {
-            float targetSpeed = targetVelocity.magnitude;
-            Vector2 targetDir = targetVelocity.normalized;
+        Vector2 newPos = rb.position + desiredVelocity * Time.fixedDeltaTime;
+        rb.MovePosition(newPos);
 
-            // Плавное изменение скорости
-            if (targetSpeed > currentSpeed)
-            {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * deltaTime);
-            }
-            else
-            {
-                currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, deceleration * deltaTime);
-            }
-
-            // Плавное изменение направления
-            if (desiredDirection != Vector2.zero && targetDir != Vector2.zero)
-            {
-                desiredDirection = Vector2.MoveTowards(desiredDirection, targetDir, rotationSpeed * deltaTime);
-            }
-            else
-            {
-                desiredDirection = targetDir;
-            }
-
-            currentVelocity = desiredDirection * currentSpeed;
-        }
-        else
-        {
-            currentVelocity = targetVelocity;
-            currentSpeed = currentVelocity.magnitude;
-        }
-
-        // Применяем движение с обработкой коллизий
-        if (currentVelocity.magnitude > 0.001f)
-        {
-            movement = currentVelocity * deltaTime;
-
-            // Поворот в направлении движения
-            if (rotateToDirection && currentVelocity.magnitude > 0.1f)
-            {
-                float angle = Mathf.Atan2(currentVelocity.y, currentVelocity.x) * Mathf.Rad2Deg;
-                Quaternion targetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * deltaTime);
-            }
-        }
-        else if (isMoving)
-        {
-            StopMovement();
-        }
+        //// Поворот в направлении движения (опционально)
+        //if (targetVelocity.magnitude > 0.1f && movementType != MovementType.Oscillate)
+        //{
+        //    float angle = Mathf.Atan2(targetVelocity.y, targetVelocity.x) * Mathf.Rad2Deg;
+        //    rb.rotation = angle;
+        //}
     }
 
-
-
-
-    /// <summary>
-    /// Получение целевой скорости в зависимости от типа движения
-    /// </summary>
-    private Vector2 GetTargetVelocity(float deltaTime)
+    private Vector2 GetDesiredVelocity()
     {
+        Vector2 vel = Vector2.zero;
         switch (movementType)
         {
             case MovementType.Directional:
-                return direction.normalized * speed;
+                vel = direction.normalized * speed;
+                break;
 
             case MovementType.Target:
-                return GetTargetVelocity();
+                if (target != null)
+                {
+                    Vector2 toTarget = (Vector2)target.position - rb.position;
+                    if (toTarget.magnitude < 0.1f)
+                        onTargetReached?.Invoke();
+                    else
+                        vel = toTarget.normalized * speed;
+                }
+                break;
 
             case MovementType.Path:
-                return GetPathVelocity();
+                if (waypoints.Length > 0)
+                {
+                    Vector2 toWaypoint = (Vector2)waypoints[currentWaypoint].position - rb.position;
+                    if (toWaypoint.magnitude < waypointDistance)
+                    {
+                        currentWaypoint++;
+                        if (currentWaypoint >= waypoints.Length)
+                            currentWaypoint = loopPath ? 0 : waypoints.Length - 1;
+                    }
+                    vel = toWaypoint.normalized * speed;
+                }
+                break;
 
             case MovementType.Random:
-                return GetRandomVelocity(deltaTime);
+                randomTimer += Time.fixedDeltaTime;
+                if (randomTimer >= changeDirInterval)
+                {
+                    randomDir = Random.insideUnitCircle.normalized;
+                    randomTimer = 0f;
+                }
+                vel = randomDir * speed;
+                break;
 
             case MovementType.Follow:
-                return GetFollowVelocity();
+                if (target != null)
+                {
+                    Vector2 toTarget = (Vector2)target.position - rb.position;
+                    if (toTarget.magnitude > followDistance)
+                        vel = toTarget.normalized * speed;
+                }
+                break;
 
             case MovementType.Oscillate:
-                return GetOscillationVelocity(deltaTime);
+                oscTime += Time.fixedDeltaTime * frequency * Mathf.PI * 2f;
+                Vector2 offset = axis * Mathf.Sin(oscTime) * amplitude;
+                Vector2 desiredPos = startPos + offset;
+                vel = (desiredPos - rb.position) * speed; // скорость, направленная к цели
+                break;
 
             case MovementType.Homing:
-                return GetHomingVelocity(deltaTime);
-
-            default:
-                return Vector2.zero;
-        }
-    }
-
-    /// <summary>
-    /// Движение к цели
-    /// </summary>
-    private Vector2 GetTargetVelocity()
-    {
-        if (target == null)
-            return Vector2.zero;
-
-        Vector2 toTarget = (Vector2)target.position - rb2d.position;
-        float distance = toTarget.magnitude;
-
-        if (distance < targetReachedDistance)
-        {
-            if (stopOnTargetReached)
-            {
-                onTargetReached?.Invoke();
-                return Vector2.zero;
-            }
-        }
-
-        return toTarget.normalized * speed;
-    }
-
-    /// <summary>
-    /// Движение по пути
-    /// </summary>
-    private Vector2 GetPathVelocity()
-    {
-        if (waypoints == null || waypoints.Length == 0)
-            return Vector2.zero;
-
-        Transform currentWaypoint = waypoints[currentWaypointIndex];
-        Vector2 toWaypoint = (Vector2)currentWaypoint.position - rb2d.position;
-        float distance = toWaypoint.magnitude;
-
-        if (distance < waypointReachedDistance)
-        {
-            currentWaypointIndex++;
-            onWaypointReached?.Invoke();
-
-            if (currentWaypointIndex >= waypoints.Length)
-            {
-                if (loopPath)
+                if (target != null)
                 {
-                    currentWaypointIndex = 0;
+                    Vector2 toTarget = (Vector2)target.position - rb.position;
+                    if (toTarget.magnitude < homingRange)
+                    {
+                        Vector2 currentDir = targetVelocity.normalized;
+                        if (currentDir == Vector2.zero) currentDir = direction.normalized;
+                        Vector2 newDir = currentDir.RotateTowards(toTarget.normalized, turnSpeed * Mathf.Deg2Rad * Time.fixedDeltaTime, 1f);
+                        vel = newDir * speed;
+                    }
+                    else vel = direction.normalized * speed;
                 }
-                else
-                {
-                    StopMovement();
-                    return Vector2.zero;
-                }
-            }
-        }
-
-        return toWaypoint.normalized * speed;
-    }
-
-    /// <summary>
-    /// Случайное движение
-    /// </summary>
-    private Vector2 GetRandomVelocity(float deltaTime)
-    {
-        randomTimer += deltaTime;
-
-        if (randomTimer >= randomDirectionChangeTime)
-        {
-            randomDirection = GetRandomDirection();
-            currentSpeed = speed + Random.Range(-randomSpeedVariation, randomSpeedVariation);
-            randomTimer = 0f;
-        }
-
-        return randomDirection * currentSpeed;
-    }
-
-    /// <summary>
-    /// Следование за объектом
-    /// </summary>
-    private Vector2 GetFollowVelocity()
-    {
-        if (target == null)
-            return Vector2.zero;
-
-        Vector2 toTarget = (Vector2)target.position - rb2d.position;
-        float distance = toTarget.magnitude;
-
-        if (distance <= followDistance)
-            return Vector2.zero;
-
-        Vector2 desiredPosition = (Vector2)target.position - toTarget.normalized * followDistance;
-        Vector2 direction = (desiredPosition - rb2d.position).normalized;
-
-        return direction * speed;
-    }
-
-    /// <summary>
-    /// Колебательное движение
-    /// </summary>
-    private Vector2 GetOscillationVelocity(float deltaTime)
-    {
-        oscillationTimer += deltaTime * oscillationFrequency * Mathf.PI * 2f;
-
-        // Позиция на синусоиде
-        Vector2 offset = oscillationAxis * Mathf.Sin(oscillationTimer) * oscillationAmplitude;
-        Vector2 targetPosition = oscillationStartPosition + offset;
-
-        // Направление к следующей позиции
-        Vector2 direction = (targetPosition - rb2d.position).normalized;
-
-        return direction * speed;
-    }
-
-    /// <summary>
-    /// Самонаведение на цель
-    /// </summary>
-    private Vector2 GetHomingVelocity(float deltaTime)
-    {
-        if (target == null)
-            return direction.normalized * speed;
-
-        Vector2 toTarget = (Vector2)target.position - rb2d.position;
-        float distance = toTarget.magnitude;
-
-        if (distance > homingRange)
-            return direction.normalized * speed;
-
-        // Плавный поворот к цели
-        Vector2 currentDir = direction.normalized;
-        Vector2 targetDir = toTarget.normalized;
-
-        float maxAngleChange = homingTurnSpeed * deltaTime;
-        float angle = Vector2.SignedAngle(currentDir, targetDir);
-        float angleChange = Mathf.Clamp(angle, -maxAngleChange, maxAngleChange);
-
-        direction = Quaternion.Euler(0, 0, angleChange) * currentDir;
-
-        return direction.normalized * speed;
-    }
-
-    /// <summary>
-    /// Получение случайного направления
-    /// </summary>
-    private Vector2 GetRandomDirection()
-    {
-        float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-    }
-
-    /// <summary>
-    /// Публичные методы управления
-    /// </summary>
-
-    /// <summary>
-    /// Начать движение
-    /// </summary>
-    public void StartMovement()
-    {
-        isMoving = true;
-        onMovementStarted?.Invoke();
-    }
-
-    /// <summary>
-    /// Остановить движение
-    /// </summary>
-    public void StopMovement()
-    {
-        isMoving = false;
-        currentVelocity = Vector2.zero;
-        currentSpeed = 0f;
-        onMovementStopped?.Invoke();
-    }
-
-    /// <summary>
-    /// Установить направление движения
-    /// </summary>
-    public void SetDirection(Vector2 newDirection)
-    {
-        direction = newDirection.normalized;
-        if (!isMoving) StartMovement();
-    }
-
-
-    /// <summary>
-    /// Установить цель
-    /// </summary>
-    public void SetTarget(Transform newTarget)
-    {
-        target = newTarget;
-        if (movementType == MovementType.Target && !isMoving)
-            StartMovement();
-    }
-
-    /// <summary>
-    /// Установить тип движения
-    /// </summary>
-    public void SetMovementType(MovementType type)
-    {
-        movementType = type;
-        InitializeMovementType();
-    }
-
-    /// <summary>
-    /// Инициализация типа движения
-    /// </summary>
-    private void InitializeMovementType()
-    {
-        switch (movementType)
-        {
-            case MovementType.Oscillate:
-                oscillationStartPosition = rb2d.position;
-                oscillationTimer = 0f;
-                break;
-
-            case MovementType.Random:
-                randomDirection = GetRandomDirection();
-                randomTimer = 0f;
-                break;
-
-            case MovementType.Path:
-                currentWaypointIndex = 0;
+                else vel = direction.normalized * speed;
                 break;
         }
+        return vel;
     }
+    [Header("Collision Response")]
+    [SerializeField] private LayerMask wallLayers; // выберите слой стен в инспекторе
 
-    /// <summary>
-    /// Установить путь
-    /// </summary>
-    public void SetWaypoints(Transform[] newWaypoints)
-    {
-        waypoints = newWaypoints;
-        currentWaypointIndex = 0;
-        if (movementType == MovementType.Path && !isMoving)
-            StartMovement();
-    }
-
-
-    /// <summary>
-    /// Телепортировать в позицию
-    /// </summary>
-    public void Teleport(Vector2 position)
-    {
-        rb2d.position = position;
-        oscillationStartPosition = position;
-    }
-
-
-    /// <summary>
-    /// Проверить, движется ли объект
-    /// </summary>
-    public bool IsMoving()
-    {
-        return isMoving && currentVelocity.magnitude > 0.01f;
-    }
-
-    /// <summary>
-    /// Перезапустить движение с начальной позиции
-    /// </summary>
-    public void ResetMovement()
-    {
-        Teleport(oscillationStartPosition);
-        currentWaypointIndex = 0;
-        randomTimer = 0f;
-        oscillationTimer = 0f;
-        currentVelocity = Vector2.zero;
-        currentSpeed = speed;
-        isMoving = false;
-    }
-
+    // Публичные методы управления
+    public void SetDirection(Vector2 dir) => direction = dir.normalized;
+    public void SetSpeed(float newSpeed) => speed = newSpeed;
+    public void SetTarget(Transform t) => target = t;
+    public void Stop() => rb.linearVelocity = Vector2.zero;
+    public void Teleport(Vector2 pos) => rb.position = pos;
 }

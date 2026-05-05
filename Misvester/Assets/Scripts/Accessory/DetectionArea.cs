@@ -20,7 +20,7 @@ public class DetectionArea : MonoBehaviour
 
     public T GetFirstByType<T>() where T : Component
     {
-        var objects = predictor.GetObjectsInsideOfType<T>();
+        var objects = predictor.GetComponentsInside<T>();
         if (objects.Count > 0)
             return objects[0];
         return null;
