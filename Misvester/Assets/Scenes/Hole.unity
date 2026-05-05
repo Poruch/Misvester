@@ -416,74 +416,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781d130f77815b3439f8811cacda1c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 0
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 0
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 13
-  maxPushSteps: 4
+  isStatic: 0
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5
   acceleration: 10
-  deceleration: 8
-  useSmoothMovement: 1
-  rotateToDirection: 0
-  rotationSpeed: 360
-  changeRotate: 0
   target: {fileID: 0}
-  targetReachedDistance: 0.1
-  stopOnTargetReached: 1
   waypoints: []
+  waypointDistance: 0.2
   loopPath: 1
-  waypointReachedDistance: 0.1
-  randomDirectionChangeTime: 2
-  randomSpeedVariation: 2
+  changeDirInterval: 2
   followDistance: 2
-  followSmoothness: 5
-  oscillationAmplitude: 2
-  oscillationFrequency: 1
-  oscillationAxis: {x: 1, y: 0}
-  homingTurnSpeed: 90
+  amplitude: 2
+  frequency: 1
+  axis: {x: 1, y: 0}
   homingRange: 10
+  turnSpeed: 180
   onTargetReached:
     m_PersistentCalls:
       m_Calls: []
-  onWaypointReached:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStopped:
-    m_PersistentCalls:
-      m_Calls: []
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &189708381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +455,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &261836236
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,6 +469,7 @@ GameObject:
   - component: {fileID: 261836238}
   - component: {fileID: 261836237}
   - component: {fileID: 261836241}
+  - component: {fileID: 261836242}
   m_Layer: 7
   m_Name: Box (1)
   m_TagString: Untagged
@@ -578,38 +535,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b6d50b2f4f4874ba285bc472590b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 1
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 4
-  maxPushSteps: 4
+  isStatic: 0
 --- !u!212 &261836239
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -698,6 +625,34 @@ MonoBehaviour:
   spriteRenderers:
   - {fileID: 588887060}
   - {fileID: 261836239}
+  obj: {fileID: 0}
+--- !u!50 &261836242
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261836236}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &359474605
 GameObject:
   m_ObjectHideFlags: 0
@@ -712,7 +667,7 @@ GameObject:
   - component: {fileID: 359474608}
   - component: {fileID: 359474610}
   - component: {fileID: 359474611}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ActivateButton1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -801,16 +756,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727908514b7b0014fa89ee14efab14ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  detectionMask:
     serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
+    m_Bits: 4294967295
+  detectTriggers: 1
+  detectNonTriggers: 0
+  checkEveryFrame: 1
+  checkInterval: 0.1
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -820,6 +772,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+  showDebug: 1
 --- !u!114 &359474609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -868,7 +821,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -900,6 +853,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &376648428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1130,6 +1084,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &468943946
 GameObject:
   m_ObjectHideFlags: 0
@@ -2016,16 +1971,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff83487d19b5b504c984b8b6f43361c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  detectionMask:
     serializedVersion: 2
-    m_Bits: 8
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 0
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
+    m_Bits: 4294967295
+  detectTriggers: 1
+  detectNonTriggers: 0
+  checkEveryFrame: 1
+  checkInterval: 0.1
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -2035,6 +1987,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+  showDebug: 1
   exit: {fileID: 0}
   offset: {x: 4, y: 0}
 --- !u!212 &762098987
@@ -2595,6 +2548,7 @@ GameObject:
   - component: {fileID: 1143637375}
   - component: {fileID: 1143637374}
   - component: {fileID: 1143637378}
+  - component: {fileID: 1143637379}
   m_Layer: 7
   m_Name: Box (2)
   m_TagString: Untagged
@@ -2660,38 +2614,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b6d50b2f4f4874ba285bc472590b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 1
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 4
-  maxPushSteps: 4
+  isStatic: 0
 --- !u!212 &1143637376
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2780,6 +2704,34 @@ MonoBehaviour:
   spriteRenderers:
   - {fileID: 1681922856}
   - {fileID: 1143637376}
+  obj: {fileID: 0}
+--- !u!50 &1143637379
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143637373}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1297613040
 GameObject:
   m_ObjectHideFlags: 0
@@ -3001,74 +2953,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781d130f77815b3439f8811cacda1c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 0
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 0
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 2
-  maxPushSteps: 4
+  isStatic: 0
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5
   acceleration: 10
-  deceleration: 8
-  useSmoothMovement: 1
-  rotateToDirection: 0
-  rotationSpeed: 360
-  changeRotate: 0
   target: {fileID: 0}
-  targetReachedDistance: 0.1
-  stopOnTargetReached: 1
   waypoints: []
+  waypointDistance: 0.2
   loopPath: 1
-  waypointReachedDistance: 0.1
-  randomDirectionChangeTime: 2
-  randomSpeedVariation: 2
+  changeDirInterval: 2
   followDistance: 2
-  followSmoothness: 5
-  oscillationAmplitude: 2
-  oscillationFrequency: 1
-  oscillationAxis: {x: 1, y: 0}
-  homingTurnSpeed: 90
+  amplitude: 2
+  frequency: 1
+  axis: {x: 1, y: 0}
   homingRange: 10
+  turnSpeed: 180
   onTargetReached:
     m_PersistentCalls:
       m_Calls: []
-  onWaypointReached:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStopped:
-    m_PersistentCalls:
-      m_Calls: []
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1303084308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3169,6 +3076,7 @@ GameObject:
   - component: {fileID: 1341432010}
   - component: {fileID: 1341432013}
   - component: {fileID: 1341432014}
+  - component: {fileID: 1341432015}
   m_Layer: 7
   m_Name: Box
   m_TagString: Untagged
@@ -3188,38 +3096,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3b6d50b2f4f4874ba285bc472590b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 1
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 3
-  maxPushSteps: 4
+  isStatic: 0
 --- !u!212 &1341432011
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3354,6 +3232,34 @@ MonoBehaviour:
   spriteRenderers:
   - {fileID: 810839971}
   - {fileID: 1341432011}
+  obj: {fileID: 0}
+--- !u!50 &1341432015
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341432009}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1342222053
 GameObject:
   m_ObjectHideFlags: 0
@@ -3550,74 +3456,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 781d130f77815b3439f8811cacda1c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 128
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 0
-  onTriggerEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerStay:
-    m_PersistentCalls:
-      m_Calls: []
-  onTriggerExit:
-    m_PersistentCalls:
-      m_Calls: []
-  skinWidth: 0.01
-  isStatic: 0
-  pushOutEveryFrame: 1
-  maxPushOutAttempts: 3
-  pushOutOnStart: 1
-  pushMultiplier: 1.2
-  minPushOutDistance: 0.001
-  pushOutForce: 0.1
-  maxStep: 5
-  collisionColor: {r: 1, g: 0, b: 0, a: 1}
-  logPushOut: 0
   mass: 5
-  maxPushSteps: 4
+  isStatic: 0
   movementType: 0
   direction: {x: 1, y: 0}
   speed: 5
   acceleration: 20
-  deceleration: 5
-  useSmoothMovement: 1
-  rotateToDirection: 0
-  rotationSpeed: 360
-  changeRotate: 0
   target: {fileID: 0}
-  targetReachedDistance: 0.1
-  stopOnTargetReached: 1
   waypoints: []
+  waypointDistance: 0.2
   loopPath: 1
-  waypointReachedDistance: 0.1
-  randomDirectionChangeTime: 2
-  randomSpeedVariation: 2
+  changeDirInterval: 2
   followDistance: 2
-  followSmoothness: 5
-  oscillationAmplitude: 2
-  oscillationFrequency: 1
-  oscillationAxis: {x: 1, y: 0}
-  homingTurnSpeed: 90
+  amplitude: 2
+  frequency: 1
+  axis: {x: 1, y: 0}
   homingRange: 10
+  turnSpeed: 180
   onTargetReached:
     m_PersistentCalls:
       m_Calls: []
-  onWaypointReached:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onMovementStopped:
-    m_PersistentCalls:
-      m_Calls: []
+  wallLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!61 &1418218171
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3680,6 +3541,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1463569888
 GameObject:
   m_ObjectHideFlags: 0
@@ -3918,6 +3780,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1578092532
 GameObject:
   m_ObjectHideFlags: 0
@@ -4156,6 +4019,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1650660243
 GameObject:
   m_ObjectHideFlags: 0
@@ -4245,7 +4109,7 @@ GameObject:
   - component: {fileID: 1656484828}
   - component: {fileID: 1656484830}
   - component: {fileID: 1656484831}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ActivateButton2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4334,16 +4198,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727908514b7b0014fa89ee14efab14ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  detectionMask:
     serializedVersion: 2
-    m_Bits: 136
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
+    m_Bits: 4294967295
+  detectTriggers: 1
+  detectNonTriggers: 0
+  checkEveryFrame: 1
+  checkInterval: 0.1
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -4353,6 +4214,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+  showDebug: 1
 --- !u!114 &1656484829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4401,7 +4263,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -4433,6 +4295,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1681922855
 GameObject:
   m_ObjectHideFlags: 0
@@ -4671,6 +4534,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1796312772
 GameObject:
   m_ObjectHideFlags: 0
@@ -4885,6 +4749,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1 &1843672433
 GameObject:
   m_ObjectHideFlags: 0
@@ -4980,7 +4845,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -5027,16 +4892,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727908514b7b0014fa89ee14efab14ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  detectionMask:
     serializedVersion: 2
-    m_Bits: 128
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
+    m_Bits: 4294967295
+  detectTriggers: 1
+  detectNonTriggers: 0
+  checkEveryFrame: 1
+  checkInterval: 0.1
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -5046,6 +4908,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+  showDebug: 1
 --- !u!1 &1954191472
 GameObject:
   m_ObjectHideFlags: 0
@@ -5060,7 +4923,7 @@ GameObject:
   - component: {fileID: 1954191475}
   - component: {fileID: 1954191477}
   - component: {fileID: 1954191478}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ResetButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5167,16 +5030,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727908514b7b0014fa89ee14efab14ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  detectionMask:
     serializedVersion: 2
-    m_Bits: 8
-  isActiveTrigger: 1
-  isEveryFrame: 1
-  triggerOnEnter: 1
-  triggerOnStay: 1
-  triggerOnExit: 1
-  triggerCheckInterval: 0.1
-  showDebug: 1
+    m_Bits: 4294967295
+  detectTriggers: 1
+  detectNonTriggers: 0
+  checkEveryFrame: 1
+  checkInterval: 0.1
   onTriggerEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -5186,6 +5046,7 @@ MonoBehaviour:
   onTriggerExit:
     m_PersistentCalls:
       m_Calls: []
+  showDebug: 1
 --- !u!61 &1954191477
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5216,7 +5077,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -5248,6 +5109,7 @@ MonoBehaviour:
   offset: 0
   spriteRenderers:
   - {fileID: 0}
+  obj: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
